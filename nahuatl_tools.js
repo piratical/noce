@@ -1264,6 +1264,8 @@ const nwt={
   /////////////////////////////////////////
   splitToMetaWords:function(input){
     //const words = input.split(/[\.\,\!\?]| +/);
+    //const words = input.split(/ +/);
+    
     const words = input.split(/ +/);
 
     const metaWords=[];
@@ -1281,6 +1283,10 @@ const nwt={
       mw.isPerson       = nms.isName( nwt.stripPunctuation(mw.original) );
       metaWords.push( mw );
     }
+    //console.log('=== DEBUG ===');
+    //console.log(metaWords);
+    //console.log('=== DEBUG ===');
+    
     return metaWords; 
   },
   /////////////////////////////////////////

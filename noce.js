@@ -31,8 +31,10 @@ function convertNahuatl(inString){
   //const inString = ta_inp.value;
   if(!inString){
     return;
-  }  
-  const metaWords = nwt.splitToMetaWords(inString);
+  }
+  
+  // 2021.10.12.ET: NFC Normalization moved here: 
+  const metaWords = nwt.splitToMetaWords(inString.normalize('NFC'));
 
   // CREATE RESULT SET CONTAINERS:
   let hmod=''; // Hasler Modern
@@ -42,6 +44,7 @@ function convertNahuatl(inString){
   let ipa =''; // New IPA
   let atom=''; // Atomic
   let allo=''; // Allophonic
+  let iph =''; // IPA *PHONETIC* <= This is much better than the plain old IPA because it is based on the allophones
 
   // "Check boxes" to determine if capitalized words should be converted or not:
   let cb_hasler={}, cb_sep={},cb_ack={},cb_trager={},cb_atom={},cb_allo={};
@@ -56,6 +59,8 @@ function convertNahuatl(inString){
     // CONVERT WORDS TO OUTPUT ORTHOGRAPHIES:
     
     // EXPERIMENTAL: See if the word should have a geminated consonant:
+    // NB: This has only limited utility at the moment. Might be better
+    // to remove it altogether ... but it is harmless ...
     metaWord.atomic = gmn.findGeminate(metaWord.atomic);
 
     ////////////////////////////////////////
@@ -186,28 +191,14 @@ function convertNahuatl(inString){
   ipa  = ipa.trim();
   atom = atom.trim();
   allo = allo.trim();
-  return { hasler:hmod,sep:sep,ack:ack,trager:tmod,ipa:ipa,atom:atom,allo:allo }
+  // 2021.10.12.ET Addendum: Fill in IPA Phonetic based on the allo data:
+  iph  = nwt.atomicToIPAPhonetic(allo);
+  return { hasler:hmod,sep:sep,ack:ack,trager:tmod,ipa:ipa,atom:atom,allo:allo,iph:iph };
 
 }
 
-////////////////////
 //
-// MAIN
+// EXPORTS:
 //
-////////////////////
-if(process.argv.length!=3){
-  console.log("Please specify a word or phrase to convert on the command line.");
-  return 1;
-}
-
-const input=process.argv[2];
-console.log(`INPUT: ${input}`);
-// Force to Unicode normalized precomposed forms:
-const nfcForm = input.normalize('NFC');
-const result = convertNahuatl(nfcForm);
-
-console.log(result);
-console.log('SYLLABIFIED:');
-console.log(nwt.atomicToIPAPhonetic(result.allo));
-return 0;
+exports.convertNahuatl = convertNahuatl;
 
