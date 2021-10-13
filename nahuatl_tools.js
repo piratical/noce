@@ -1229,13 +1229,66 @@ const nwt={
       return false;
     }
   },
+  punctuation:{
+    all:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
+    prefixSet:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
+    postfixSet:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\''
+  },
   /////////////////////////////////
   //
   // stripPunctuation:
   //
   /////////////////////////////////
-  stripPunctuation:function(s){
-    return s.replace(/[\.,—–‒\/#!¡$%\^&\*;:{}=\-_`~()@\+\?¿><\[\]\+"'“”«»‘’‛‹›…]/g, '');
+  //stripPunctuation:function(s){
+  //  return s.replace(nwt.punctuation.all,'ug'));
+  //},
+
+  /////////////////////////////////
+  //
+  // segregatePunctuation:
+  //
+  // Given a string representing a
+  // MetaWord as input, this function
+  // returns an array containing:
+  //
+  // 1. All prefixed "punctation" symbols
+  //    as the first element in the returned array
+  // 
+  // 2. The text of the word in the 2nd element
+  // 
+  // 3. All suffixed "punctuation" symbols in the
+  //    3rd element.
+  //
+  // Note that "punctuation" may be broadly defined
+  // for the purposes of this function. Look at the
+  // regular expression to see what exactly is 
+  // included.
+  //
+  /////////////////////////////////
+  segregatePunctuation:function(s){
+
+    // As ECMAScript/Javascript regexs are not Unicode friendly
+    // and do not support Unicode character classes, here we 
+    // punt and just do it without using regexps for now:
+    
+    const r={ prefix:'' , word:'' , postfix:'' };
+    
+    let i=0;
+    // Grab prefixes only:
+    for(;i<s.length && nwt.punctuation.prefixSet.includes(s[i]); i++){
+      r.prefix += s[i];
+    }
+    // Continue and grab the word part:
+    for(;i<s.length && !nwt.punctuation.postfixSet.includes(s[i]);i++){
+      r.word += s[i];
+    }
+    // Anything left over is supposedly in the punctuation.postfixSet:
+    for(;i<s.length;i++){
+      r.postfix += s[i];
+    }
+    
+    // RETURN THE RESULT OBJECT:
+    return [ r.prefix , r.word, r.postfix ];
   },
   ////////////////////////////////////////////////////////////
   //
@@ -1245,7 +1298,7 @@ const nwt={
   //
   ////////////////////////////////////////////////////////////
   isDeity:function(name){
-    return nwt.map.deities[nwt.stripPunctuation(name)];
+    return nwt.map.deities[name];
   },
   //////////////////////////////////////////////
   // 
@@ -1272,15 +1325,24 @@ const nwt={
     for(let word of words){
       const mw = {}; // meta-word object
       mw.original       = word;
-      mw.atomic         = nwt.toAtomic( word.toLowerCase() );
-      const firstLetter = word[0];
+      // TEMPORARY FIX:
+      [ mw.prefixed, mw.word, mw.postfixed ] = nwt.segregatePunctuation(mw.original);
+      // DEBUG:
+      console.log(`=====\npre:${mw.prefixed} * word:${mw.word} * post:${mw.postfixed}`);
+      mw.atomic         = nwt.toAtomic( mw.word.toLowerCase() );
+      const firstLetter = mw.word[0];
       // flic = first letter is capital
       // 2021.10.12.ET Addendum: Check that firstLetter is a Latin letter, not a Trager Orthography letter:
-      mw.flic           = firstLetter && firstLetter<nab.vowelA ? firstLetter===firstLetter.toUpperCase() : false; // flic
+      if(firstLetter && firstLetter < nab.vowelA){
+        mw.flic = firstLetter===firstLetter.toUpperCase();
+      }else{
+        // TO DO: For Trager, look for name prefixes
+        mw.flic = false;
+      }
       mw.isPlace        = nwt.hasLocativeSuffix( mw.atomic );
       mw.isDeity        = nwt.isDeity( mw.atomic );
       // Now using the much more comprehensive names.js module:
-      mw.isPerson       = nms.isName( nwt.stripPunctuation(mw.original) );
+      mw.isPerson       = nms.isName( mw.word );
       metaWords.push( mw );
     }
     //console.log('=== DEBUG ===');
