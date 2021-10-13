@@ -104,13 +104,37 @@ function convertNahuatl(inString){
     //////////////////////////////////////////
     let aack   = nwt.atomicToACK( metaWord.atomic );
     let ttmod  = nwt.atomicToTragerModern( metaWord.atomic );
-
+    
     // IPA:
     let iipa   = nwt.atomicToIPA( metaWord.atomic );
     
     // ATOMIC (NO CHANGE):
     let aatom  = metaWord.atomic;
-
+    
+    ////////////////////////////////////
+    //
+    // READY TO ACCUMULATE RESULTS:
+    //
+    ////////////////////////////////////
+    
+    //
+    // 1. Add back in any prefixes from the
+    //    original metaWord:
+    if(metaWord.prefixed){
+      hmod += metaWord.prefixed;
+      sep  += metaWord.prefixed;
+      ack  += metaWord.prefixed;
+      tmod += metaWord.prefixed;
+      //ipa  += metaWord.prefixed;
+      //atom += metaWord.prefixed;
+      //allo += metaWord.prefixed;
+    }
+    
+    //
+    // 2. Add the word to the accumulator:
+    //    If the original was capitalized,
+    //    capitalize it again:
+    //
     if(metaWord.flic){
       // FLIC: First letter is capitalized, so:
       
@@ -169,6 +193,23 @@ function convertNahuatl(inString){
       atom += aatom;
       allo += allophonic;
     }
+    
+    //
+    // 3. Add back in any postfixes from the
+    //    original metaWord:
+    if(metaWord.postfixed){
+      hmod += metaWord.postfixed;
+      sep  += metaWord.postfixed;
+      ack  += metaWord.postfixed;
+      tmod += metaWord.postfixed;
+      //ipa  += metaWord.postfixed;
+      //atom += metaWord.postfixed;
+      //allo += metaWord.postfixed;
+    }
+    
+    //
+    // 4. Add space after the word:
+    //
     hmod += ' ';
     sep  += ' ';
     ack  += ' ';
