@@ -1273,7 +1273,8 @@ const nwt={
       mw.atomic         = nwt.toAtomic( word.toLowerCase() );
       const firstLetter = word[0];
       // flic = first letter is capital
-      mw.flic           = firstLetter ? firstLetter===firstLetter.toUpperCase() : false; // flic
+      // 2021.10.12.ET Addendum: Check that firstLetter is a Latin letter, not a Trager Orthography letter:
+      mw.flic           = firstLetter && firstLetter<nab.vowelA ? firstLetter===firstLetter.toUpperCase() : false; // flic
       mw.isPlace        = nwt.hasLocativeSuffix( mw.atomic );
       mw.isDeity        = nwt.isDeity( mw.atomic );
       // Now using the much more comprehensive names.js module:

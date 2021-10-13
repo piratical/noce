@@ -1,3 +1,16 @@
+//////////////////////////////////////////////////////////////
+//
+// NOCE
+//
+// Nahuatl Orthography Conversion Engine
+//
+// (c) 2019, 2020, 2021 by Edward H. Trager.
+// 
+//////////////////////////////////////////////////////////////
+
+//
+// INCLUDES
+//
 const NWT = require('./nahuatl_tools.js');
 const nab = NWT.nab;
 const nwt = NWT.nwt;
@@ -17,10 +30,6 @@ function convertNahuatl(inString){
 
   //const inString = ta_inp.value;
   if(!inString){
-    //ta_hasler.value = '';
-    //ta_sep.value    = '';
-    //ta_ack.value    = '';
-    //ta_trager.value = '';
     return;
   }  
   const metaWords = nwt.splitToMetaWords(inString);
