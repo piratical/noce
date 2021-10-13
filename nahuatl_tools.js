@@ -1328,7 +1328,7 @@ const nwt={
       // TEMPORARY FIX:
       [ mw.prefixed, mw.word, mw.postfixed ] = nwt.segregatePunctuation(mw.original);
       // DEBUG:
-      console.log(`=====\npre:${mw.prefixed} * word:${mw.word} * post:${mw.postfixed}`);
+      // console.log(`=====\npre:${mw.prefixed} * word:${mw.word} * post:${mw.postfixed}`);
       mw.atomic         = nwt.toAtomic( mw.word.toLowerCase() );
       const firstLetter = mw.word[0];
       // flic = first letter is capital
