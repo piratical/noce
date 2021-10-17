@@ -307,6 +307,23 @@ const alo={
   },
   kw2k:{
     // No exceptions/exclusions
+  },
+  //
+  // NOTA BENE: THIS IS NOT SUFFICIENT:
+  // THIS NEEDS TO BE A REGEXP-BASED FUNCTION OR
+  // SOMETHING:
+  //
+  ll2hl:{
+    // These are the words that
+    // preserve /ll/ as [l]
+    // and do not convert to [hl]:
+    exclude:{
+      'millah':1,
+      'milli':1,
+      'pilli':1,
+      'xillan':1,
+      'xilli':1
+    }
   }
 };
 
@@ -929,6 +946,24 @@ const nwt={
     // Single word at end of a string:
     atomic = atomic.replace(/([aeio])κ$/,(match,p1)=>{
       return `${p1}k`;
+    });
+    return atomic;
+  },
+  ////////////////////////////////////////////
+  //
+  // atomicAllophoneLL2LH
+  //
+  // -> Convert /L/ in coda position to [H]
+  //    when followed by an /L/:
+  // -> Be sure to check exclusion list before
+  //    applying this function
+  ////////////////////////////////////////////
+  atomicAllophoneLL2HL:function(atomic){
+    // Theoretically a foreign consonant could very rarely occur in 
+    // a compound neologism, so we include the foreign consonants.
+    // Also we include a space to mark the end of a word:
+    atomic = atomic.replace(/([i])l(l[ai])/g,(match,p1,p2)=>{
+      return `${p1}h${p2}`;
     });
     return atomic;
   },

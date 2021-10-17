@@ -23,7 +23,8 @@ const gmn = require('./geminate.js').gmn;
 //
 // convertNahuatl()
 //
-// => Using a pipeline that handles capitalization correctly
+// => This pipeline now generally handles capitalization and
+//    punctuation correctly.
 //
 ////////////////////////////////////////////////////////////////
 function convertNahuatl(inString){
@@ -33,7 +34,9 @@ function convertNahuatl(inString){
     return;
   }
   
-  // 2021.10.12.ET: NFC Normalization moved here: 
+  // 2021.10.12.ET: NFC Normalization moved here:
+  // NFC in particular is needed to recognize the long vowels
+  // correctly:
   const metaWords = nwt.splitToMetaWords(inString.normalize('NFC'));
 
   // CREATE RESULT SET CONTAINERS:
@@ -41,7 +44,7 @@ function convertNahuatl(inString){
   let sep =''; // SEP
   let ack =''; // ACK
   let tmod=''; // Trager Modern
-  let ipa =''; // New IPA
+  let ipa =''; // IPA
   let atom=''; // Atomic
   let allo=''; // Allophonic
   let iph =''; // IPA *PHONETIC* <= This is much better than the plain old IPA because it is based on the allophones
@@ -86,6 +89,12 @@ function convertNahuatl(inString){
     // /kw/ AS CODA TO [k] RULE:
     //
     allophonic = nwt.atomicAllophoneKw2K(allophonic);
+    //
+    // /ll/ TO [hl] RULE:
+    //
+    if(!alo.ll2hl.exclude[allophonic]){
+      allophonic = nwt.atomicAllophoneLL2HL(allophonic);
+    }
     // 
     // DEGEMINATION: Do this as the last step:
     //
