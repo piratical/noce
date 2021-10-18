@@ -299,7 +299,8 @@ const alo={
       'ipan':1,
       'λen':1,
       'λan':1,
-      'san':1
+      'san':1,
+      'xillan':1
     }
   },
   w2h:{
@@ -524,6 +525,197 @@ const nwt={
     //
     ///////////////////////////////////////////
     trager_to_atomic:[
+
+      ////////////////////////////
+      //
+      // VOWEL SIGN IA
+      //
+      ////////////////////////////
+      {k:nab.consonantMA  + nab.vowelSignIA , v:'mia'},
+      {k:nab.consonantNA  + nab.vowelSignIA , v:'nia'},
+      {k:nab.consonantPA  + nab.vowelSignIA , v:'pia'},
+      {k:nab.consonantTA  + nab.vowelSignIA , v:'tia'},
+      {k:nab.consonantCA  + nab.vowelSignIA , v:'kia'},
+      {k:nab.consonantCUA + nab.vowelSignIA , v:'κia'},
+      {k:nab.consonantTZA + nab.vowelSignIA , v:'τia'},
+      {k:nab.consonantTLA + nab.vowelSignIA , v:'λia'},
+      {k:nab.consonantCHA + nab.vowelSignIA , v:'ςia'},
+      {k:nab.consonantSA  + nab.vowelSignIA , v:'sia'},
+      {k:nab.consonantLA  + nab.vowelSignIA , v:'lia'},
+      {k:nab.consonantXA  + nab.vowelSignIA , v:'xia'},
+      {k:nab.consonantHA  + nab.vowelSignIA , v:'hia'},
+      {k:nab.consonantYA  + nab.vowelSignIA , v:'yia'},
+      {k:nab.consonantWA  + nab.vowelSignIA , v:'wia'},
+      {k:nab.consonantNYA + nab.vowelSignIA , v:'ñia'},
+      {k:nab.consonantBVA + nab.vowelSignIA , v:'βia'},
+      {k:nab.consonantDA  + nab.vowelSignIA , v:'dia'},
+      {k:nab.consonantGA  + nab.vowelSignIA , v:'gia'},
+      {k:nab.consonantFA  + nab.vowelSignIA , v:'fia'},
+      {k:nab.consonantRA  + nab.vowelSignIA , v:'ria'},
+      {k:nab.consonantRRA + nab.vowelSignIA , v:'ρia'},
+      ////////////////////////////
+      //
+      // VOWEL SIGN AI
+      //
+      ////////////////////////////
+      {k:nab.consonantMA  + nab.vowelSignAI , v:'mai'},
+      {k:nab.consonantNA  + nab.vowelSignAI , v:'nai'},
+      {k:nab.consonantPA  + nab.vowelSignAI , v:'pai'},
+      {k:nab.consonantTA  + nab.vowelSignAI , v:'tai'},
+      {k:nab.consonantCA  + nab.vowelSignAI , v:'kai'},
+      {k:nab.consonantCUA + nab.vowelSignAI , v:'κai'},
+      {k:nab.consonantTZA + nab.vowelSignAI , v:'τai'},
+      {k:nab.consonantTLA + nab.vowelSignAI , v:'λai'},
+      {k:nab.consonantCHA + nab.vowelSignAI , v:'ςai'},
+      {k:nab.consonantSA  + nab.vowelSignAI , v:'sai'},
+      {k:nab.consonantLA  + nab.vowelSignAI , v:'lai'},
+      {k:nab.consonantXA  + nab.vowelSignAI , v:'xai'},
+      {k:nab.consonantHA  + nab.vowelSignAI , v:'hai'},
+      {k:nab.consonantYA  + nab.vowelSignAI , v:'yai'},
+      {k:nab.consonantWA  + nab.vowelSignAI , v:'wai'},
+      {k:nab.consonantNYA + nab.vowelSignAI , v:'ñai'},
+      {k:nab.consonantBVA + nab.vowelSignAI , v:'βai'},
+      {k:nab.consonantDA  + nab.vowelSignAI , v:'dai'},
+      {k:nab.consonantGA  + nab.vowelSignAI , v:'gai'},
+      {k:nab.consonantFA  + nab.vowelSignAI , v:'fai'},
+      {k:nab.consonantRA  + nab.vowelSignAI , v:'rai'},
+      {k:nab.consonantRRA + nab.vowelSignAI , v:'ρai'},
+      ////////////////////////////
+      //
+      // VOWEL SIGN OA
+      //
+      ////////////////////////////
+      {k:nab.consonantMA  + nab.vowelSignOA , v:'moa'},
+      {k:nab.consonantNA  + nab.vowelSignOA , v:'noa'},
+      {k:nab.consonantPA  + nab.vowelSignOA , v:'poa'},
+      {k:nab.consonantTA  + nab.vowelSignOA , v:'toa'},
+      {k:nab.consonantCA  + nab.vowelSignOA , v:'koa'},
+      {k:nab.consonantCUA + nab.vowelSignOA , v:'κoa'},
+      {k:nab.consonantTZA + nab.vowelSignOA , v:'τoa'},
+      {k:nab.consonantTLA + nab.vowelSignOA , v:'λoa'},
+      {k:nab.consonantCHA + nab.vowelSignOA , v:'ςoa'},
+      {k:nab.consonantSA  + nab.vowelSignOA , v:'soa'},
+      {k:nab.consonantLA  + nab.vowelSignOA , v:'loa'},
+      {k:nab.consonantXA  + nab.vowelSignOA , v:'xoa'},
+      {k:nab.consonantHA  + nab.vowelSignOA , v:'hoa'},
+      {k:nab.consonantYA  + nab.vowelSignOA , v:'yoa'},
+      {k:nab.consonantWA  + nab.vowelSignOA , v:'woa'},
+      {k:nab.consonantNYA + nab.vowelSignOA , v:'ñoa'},
+      {k:nab.consonantBVA + nab.vowelSignOA , v:'βoa'},
+      {k:nab.consonantDA  + nab.vowelSignOA , v:'doa'},
+      {k:nab.consonantGA  + nab.vowelSignOA , v:'goa'},
+      {k:nab.consonantFA  + nab.vowelSignOA , v:'foa'},
+      {k:nab.consonantRA  + nab.vowelSignOA , v:'roa'},
+      {k:nab.consonantRRA + nab.vowelSignOA , v:'ρoa'},
+      ////////////////////////////
+      //
+      // VOWEL SIGN EO
+      //
+      ////////////////////////////
+      {k:nab.consonantMA  + nab.vowelSignEO , v:'meo'},
+      {k:nab.consonantNA  + nab.vowelSignEO , v:'neo'},
+      {k:nab.consonantPA  + nab.vowelSignEO , v:'peo'},
+      {k:nab.consonantTA  + nab.vowelSignEO , v:'teo'},
+      {k:nab.consonantCA  + nab.vowelSignEO , v:'keo'},
+      {k:nab.consonantCUA + nab.vowelSignEO , v:'κeo'},
+      {k:nab.consonantTZA + nab.vowelSignEO , v:'τeo'},
+      {k:nab.consonantTLA + nab.vowelSignEO , v:'λeo'},
+      {k:nab.consonantCHA + nab.vowelSignEO , v:'ςeo'},
+      {k:nab.consonantSA  + nab.vowelSignEO , v:'seo'},
+      {k:nab.consonantLA  + nab.vowelSignEO , v:'leo'},
+      {k:nab.consonantXA  + nab.vowelSignEO , v:'xeo'},
+      {k:nab.consonantHA  + nab.vowelSignEO , v:'heo'},
+      {k:nab.consonantYA  + nab.vowelSignEO , v:'yeo'},
+      {k:nab.consonantWA  + nab.vowelSignEO , v:'weo'},
+      {k:nab.consonantNYA + nab.vowelSignEO , v:'ñeo'},
+      {k:nab.consonantBVA + nab.vowelSignEO , v:'βeo'},
+      {k:nab.consonantDA  + nab.vowelSignEO , v:'deo'},
+      {k:nab.consonantGA  + nab.vowelSignEO , v:'geo'},
+      {k:nab.consonantFA  + nab.vowelSignEO , v:'feo'},
+      {k:nab.consonantRA  + nab.vowelSignEO , v:'reo'},
+      {k:nab.consonantRRA + nab.vowelSignEO , v:'ρeo'},
+      ////////////////////////////
+      //
+      // VOWEL SIGN EI
+      //
+      ////////////////////////////
+      {k:nab.consonantMA  + nab.vowelSignEI , v:'mei'},
+      {k:nab.consonantNA  + nab.vowelSignEI , v:'nei'},
+      {k:nab.consonantPA  + nab.vowelSignEI , v:'pei'},
+      {k:nab.consonantTA  + nab.vowelSignEI , v:'tei'},
+      {k:nab.consonantCA  + nab.vowelSignEI , v:'kei'},
+      {k:nab.consonantCUA + nab.vowelSignEI , v:'κei'},
+      {k:nab.consonantTZA + nab.vowelSignEI , v:'τei'},
+      {k:nab.consonantTLA + nab.vowelSignEI , v:'λei'},
+      {k:nab.consonantCHA + nab.vowelSignEI , v:'ςei'},
+      {k:nab.consonantSA  + nab.vowelSignEI , v:'sei'},
+      {k:nab.consonantLA  + nab.vowelSignEI , v:'lei'},
+      {k:nab.consonantXA  + nab.vowelSignEI , v:'xei'},
+      {k:nab.consonantHA  + nab.vowelSignEI , v:'hei'},
+      {k:nab.consonantYA  + nab.vowelSignEI , v:'yei'},
+      {k:nab.consonantWA  + nab.vowelSignEI , v:'wei'},
+      {k:nab.consonantNYA + nab.vowelSignEI , v:'ñei'},
+      {k:nab.consonantBVA + nab.vowelSignEI , v:'βei'},
+      {k:nab.consonantDA  + nab.vowelSignEI , v:'dei'},
+      {k:nab.consonantGA  + nab.vowelSignEI , v:'gei'},
+      {k:nab.consonantFA  + nab.vowelSignEI , v:'fei'},
+      {k:nab.consonantRA  + nab.vowelSignEI , v:'rei'},
+      {k:nab.consonantRRA + nab.vowelSignEI , v:'ρei'},
+      ////////////////////////////
+      //
+      // VOWEL SIGN IO
+      //
+      ////////////////////////////
+      {k:nab.consonantMA  + nab.vowelSignIO , v:'mio'},
+      {k:nab.consonantNA  + nab.vowelSignIO , v:'nio'},
+      {k:nab.consonantPA  + nab.vowelSignIO , v:'pio'},
+      {k:nab.consonantTA  + nab.vowelSignIO , v:'tio'},
+      {k:nab.consonantCA  + nab.vowelSignIO , v:'kio'},
+      {k:nab.consonantCUA + nab.vowelSignIO , v:'κio'},
+      {k:nab.consonantTZA + nab.vowelSignIO , v:'τio'},
+      {k:nab.consonantTLA + nab.vowelSignIO , v:'λio'},
+      {k:nab.consonantCHA + nab.vowelSignIO , v:'ςio'},
+      {k:nab.consonantSA  + nab.vowelSignIO , v:'sio'},
+      {k:nab.consonantLA  + nab.vowelSignIO , v:'lio'},
+      {k:nab.consonantXA  + nab.vowelSignIO , v:'xio'},
+      {k:nab.consonantHA  + nab.vowelSignIO , v:'hio'},
+      {k:nab.consonantYA  + nab.vowelSignIO , v:'yio'},
+      {k:nab.consonantWA  + nab.vowelSignIO , v:'wio'},
+      {k:nab.consonantNYA + nab.vowelSignIO , v:'ñio'},
+      {k:nab.consonantBVA + nab.vowelSignIO , v:'βio'},
+      {k:nab.consonantDA  + nab.vowelSignIO , v:'dio'},
+      {k:nab.consonantGA  + nab.vowelSignIO , v:'gio'},
+      {k:nab.consonantFA  + nab.vowelSignIO , v:'fio'},
+      {k:nab.consonantRA  + nab.vowelSignIO , v:'rio'},
+      {k:nab.consonantRRA + nab.vowelSignIO , v:'ρio'},
+      ////////////////////////////
+      //
+      // VOWEL SIGN AO
+      //
+      ////////////////////////////
+      {k:nab.consonantMA  + nab.vowelSignAO , v:'mao'},
+      {k:nab.consonantNA  + nab.vowelSignAO , v:'nao'},
+      {k:nab.consonantPA  + nab.vowelSignAO , v:'pao'},
+      {k:nab.consonantTA  + nab.vowelSignAO , v:'tao'},
+      {k:nab.consonantCA  + nab.vowelSignAO , v:'kao'},
+      {k:nab.consonantCUA + nab.vowelSignAO , v:'κao'},
+      {k:nab.consonantTZA + nab.vowelSignAO , v:'τao'},
+      {k:nab.consonantTLA + nab.vowelSignAO , v:'λao'},
+      {k:nab.consonantCHA + nab.vowelSignAO , v:'ςao'},
+      {k:nab.consonantSA  + nab.vowelSignAO , v:'sao'},
+      {k:nab.consonantLA  + nab.vowelSignAO , v:'lao'},
+      {k:nab.consonantXA  + nab.vowelSignAO , v:'xao'},
+      {k:nab.consonantHA  + nab.vowelSignAO , v:'hao'},
+      {k:nab.consonantYA  + nab.vowelSignAO , v:'yao'},
+      {k:nab.consonantWA  + nab.vowelSignAO , v:'wao'},
+      {k:nab.consonantNYA + nab.vowelSignAO , v:'ñao'},
+      {k:nab.consonantBVA + nab.vowelSignAO , v:'βao'},
+      {k:nab.consonantDA  + nab.vowelSignAO , v:'dao'},
+      {k:nab.consonantGA  + nab.vowelSignAO , v:'gao'},
+      {k:nab.consonantFA  + nab.vowelSignAO , v:'fao'},
+      {k:nab.consonantRA  + nab.vowelSignAO , v:'rao'},
+      {k:nab.consonantRRA + nab.vowelSignAO , v:'ρao'},
+
       // E
       // NATIVE CONSONANTS FOLLOWED BY VOWEL SIGN E:
       {k:nab.consonantMA  + nab.vowelSignE , v:'me'},
@@ -624,12 +816,9 @@ const nwt={
       {k:nab.consonantFA  + nab.vowelSignU , v:'fu'},
       {k:nab.consonantRA  + nab.vowelSignU , v:'ru'}, // 'r'
       {k:nab.consonantRRA + nab.vowelSignU , v:'ρu'},
-
-      // NOTA BENE: STILL MISSING THE COMPOUND VOWEL SIGNS
-      // FOLLOWING AN INITIAL CONSONANT ... TO DO!
-
+      
       // END VOWEL TREATMENT
-
+      
       // SUBJOINED NATIVE CONSONANTS:
       {k:nab.subjoinerSign + nab.consonantMA  , v:'m'},
       {k:nab.subjoinerSign + nab.consonantNA  , v:'n'},
