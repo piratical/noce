@@ -57,7 +57,28 @@ function convertNahuatl(inString){
   cb_trager.checked=true;
   cb_atom.checked=true;
   cb_allo.checked=true;
+  
+  ///////////////////////////////////////////
+  //
+  // SET UP BEFORE ITERATING OVER METAWORDS:
+  //
+  ///////////////////////////////////////////
 
+  //
+  // LL2HL SETUP:
+  //
+  // NOTA BENE: For this rule, we need to construct
+  // a regex because the "exclude" words might have
+  // prefixes or suffixes:
+  //
+  const ll2hlExcluder = nwt.arrayToOptionString(alo.ll2hl.exclude);
+  const ll2hlExcluderRegex = new RegExp(ll2hlExcluder);
+  
+  ////////////////////////////////////
+  //
+  // START ITERATING OVER METAWORDS:
+  //
+  ////////////////////////////////////
   for(const metaWord of metaWords){
     // CONVERT WORDS TO OUTPUT ORTHOGRAPHIES:
     
@@ -76,35 +97,43 @@ function convertNahuatl(inString){
     //
     let allophonic = metaWord.atomic;
     //
+    // /ll/ TO [hl] RULE:
+   
+    if(!allophonic.match(ll2hlExcluderRegex)){
+      allophonic = nwt.atomicAllophoneLL2HL(allophonic);
+    }
+    // DEBUG:
+    //else{
+    //  console.log(`${allophonic} was excluded from LL=>LH rule`);
+    //}
+    
+    //
     // TERMINAL /n/ TO [h] RULE:
+    //
+    // NOTA BENE: For this rule, we can 
+    // directly look up the full word in the 
+    // alo.n2h.exclude object map:
     //
     if(!alo.n2h.exclude[allophonic]){
       allophonic = nwt.atomicAllophoneN2H(allophonic);
     }
     //
-    // /w/ AS CODA TO [h] RULE:
+    // /w/ AS CODA TO [h] RULE: No exclusions that I know of:
     //
     allophonic = nwt.atomicAllophoneW2H(allophonic);
     //
-    // /kw/ AS CODA TO [k] RULE:
+    // /kw/ AS CODA TO [k] RULE: No exclusions that I know of:
     //
     allophonic = nwt.atomicAllophoneKw2K(allophonic);
-    //
-    // /ll/ TO [hl] RULE:
-    //
-    if(!alo.ll2hl.exclude[allophonic]){
-      allophonic = nwt.atomicAllophoneLL2HL(allophonic);
-    }
-    // 
-    // DEGEMINATION: Do this as the last step:
-    //
-    allophonic = nwt.atomicToDegeminate(allophonic);
     
     // FINALLY WE CAN CONVERT FROM ALLOPHONIZED
     // ATOMIC TO DESTINATION "F" ORTHOGRAPHIES:
-    let hhmod  = nwt.atomicToHaslerModern( allophonic );
-    let ssep   = nwt.atomicToSEP( allophonic );
     
+    // FOR HASLER, DO *NOT* DEGEMINATE:
+    let hhmod  = nwt.atomicToHaslerModern( allophonic );
+    
+    // ONLY SEP DEGEMINATES:
+    let ssep   = nwt.atomicToSEP( nwt.atomicToDegeminate(allophonic) );
     
     //////////////////////////////////////////
     //

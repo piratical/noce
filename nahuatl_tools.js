@@ -318,13 +318,15 @@ const alo={
     // These are the words that
     // preserve /ll/ as [l]
     // and do not convert to [hl]:
-    exclude:{
-      'millah':1,
-      'milli':1,
-      'pilli':1,
-      'xillan':1,
-      'xilli':1
-    }
+    // NOTA BENE: THIS IS AN ARRAY OF WORDS
+    // TO BE USED IN A REGEX:
+    exclude:[
+      'millah',
+      'milli',
+      'pilli',
+      'xillan',
+      'xilli'
+    ]
   }
 };
 
@@ -1582,6 +1584,25 @@ const nwt={
   /////////////////////////////////////////
   capitalize:function(s){
     return s[0].toUpperCase() + s.slice(1);
+  },
+  /////////////////////////////////////////
+  //
+  // arrayToOptionString:
+  //
+  // => returns a list of the array words
+  //    delimited by '|' vertical bar
+  //    representing OR in REGEXPs
+  //
+  /////////////////////////////////////////
+  arrayToOptionString:function(arr){
+    let os = '';
+    for(let i=0; i< arr.length ; i++){
+      os += arr[i];
+      if(i<alo.ll2hl.exclude.length-1){
+        os += '|';
+      }
+    }
+    return os;
   }
 };
 
