@@ -16,7 +16,7 @@ if(process.argv.length!=3){
 }
 
 const input=process.argv[2];
-console.log(`INPUT: ${input}`);
+//console.log(`INPUT: ${input}`);
 const result = NOCE.convertNahuatl(input);
 
 console.log(result);

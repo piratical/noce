@@ -272,8 +272,16 @@ function convertNahuatl(inString){
   allo = allo.trim();
   // 2021.10.12.ET Addendum: Fill in IPA Phonetic based on the allo data:
   iph  = nwt.atomicToIPAPhonetic(allo);
-  return { hasler:hmod,sep:sep,ack:ack,trager:tmod,ipa:ipa,atom:atom,allo:allo,iph:iph };
-
+  return { 
+    ack:ack,
+    trager:tmod,
+    hasler:hmod,
+    sep:sep,
+    atom:atom,
+    allo:allo,
+    ipa:ipa,
+    iph:iph
+  };
 }
 
 //
