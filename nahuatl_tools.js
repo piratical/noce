@@ -25,7 +25,10 @@
 ////////////////////////////////////////
 
 // REQUIRES:
-const nms = require('./names.js').nms;
+//const nms = require('./names.js').nms;
+
+// ES6 import syntax:
+import {nms} from './names.js';
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -970,7 +973,7 @@ const nwt={
     if(!input) return '';
     let atomic=input;
     for(let entry of nwt.map.general_to_atomic){
-      regex = new RegExp(entry.k,'g');
+      const regex = new RegExp(entry.k,'g');
       atomic = atomic.replace(regex,entry.v);
     }
     // Also run tragerToAtomic:
@@ -981,7 +984,7 @@ const nwt={
     if(!input) return '';
     let atomic=input;
     for(let entry of nwt.map.trager_to_atomic){
-      regex = new RegExp(entry.k,'g');
+      const regex = new RegExp(entry.k,'g');
       atomic = atomic.replace(regex,entry.v);
     }
     return atomic;
@@ -1238,7 +1241,7 @@ const nwt={
     const marker = 'ˈ';
     let syllableCount = 0;
     let letterSeen = false;
-    for(i = s.length-1;i>=0;i--){
+    for(let i = s.length-1;i>=0;i--){
       if(nwt.isAtomicLetter(s[i])){
         letterSeen=true;
         if(i===0 && syllableCount===1){
@@ -1606,8 +1609,10 @@ const nwt={
   }
 };
 
-exports.nab = nab;
-exports.nwt = nwt;
-exports.alo = alo;
+//exports.nab = nab;
+//exports.nwt = nwt;
+//exports.alo = alo;
+
+export { nab , nwt, alo };
 // END OF CODE 
 

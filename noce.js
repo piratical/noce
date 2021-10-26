@@ -11,13 +11,17 @@
 //
 // INCLUDES
 //
-const NWT = require('./nahuatl_tools.js');
+//const NWT = require('./nahuatl_tools.js');
+
+import * as NWT from './nahuatl_tools.js';
+
 const nab = NWT.nab;
 const nwt = NWT.nwt;
 const alo = NWT.alo;
 
 // Experimental:
-const gmn = require('./geminate.js').gmn;
+//const gmn = require('./geminate.js').gmn;
+import { gmn } from './geminate.js';
 
 ////////////////////////////////////////////////////////////////
 //
@@ -287,5 +291,6 @@ function convertNahuatl(inString){
 //
 // EXPORTS:
 //
-exports.convertNahuatl = convertNahuatl;
+//exports.convertNahuatl = convertNahuatl;
 
+export { convertNahuatl }

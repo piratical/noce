@@ -603,4 +603,7 @@ const nms={
   }
 }
 
-exports.nms=nms;
+//exports.nms=nms;
+
+// ES6 export / import syntax:
+export { nms };

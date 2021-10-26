@@ -852,4 +852,5 @@ const gmn={
   }
 };
 
-exports.gmn = gmn;
+//exports.gmn = gmn;
+export { gmn };
