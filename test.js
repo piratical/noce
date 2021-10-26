@@ -10,6 +10,7 @@
 //const NWT  = require('./nahuatl_tools.js');
 //const NOCE = require('./noce.js');
 
+// ES6 import:
 import * as NWT  from './nahuatl_tools.js';
 import * as NOCE from './noce.js';
 

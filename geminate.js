@@ -853,4 +853,6 @@ const gmn={
 };
 
 //exports.gmn = gmn;
+
+// ES6 export:
 export { gmn };

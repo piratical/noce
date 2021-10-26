@@ -13,6 +13,7 @@
 //
 //const NWT = require('./nahuatl_tools.js');
 
+// ES6 import:
 import * as NWT from './nahuatl_tools.js';
 
 const nab = NWT.nab;
@@ -54,14 +55,33 @@ function convertNahuatl(inString){
   let iph =''; // IPA *PHONETIC* <= This is much better than the plain old IPA because it is based on the allophones
 
   // "Check boxes" to determine if capitalized words should be converted or not:
-  let cb_hasler={}, cb_sep={},cb_ack={},cb_trager={},cb_atom={},cb_allo={};
+  const cb_hasler={
+    checked:true
+  };
+  const cb_sep={
+    checked:true
+  };
+  const cb_ack={
+    checked:true
+  };
+  const cb_trager={
+    checked:true
+  };
+  const cb_atom={
+    checked:true
+  };
+  const cb_allo={
+    checked:true
+  };
+
+  /*
   cb_hasler.checked=true; 
   cb_sep.checked=true;
   cb_ack.checked=true;
   cb_trager.checked=true;
   cb_atom.checked=true;
   cb_allo.checked=true;
-  
+  */
   ///////////////////////////////////////////
   //
   // SET UP BEFORE ITERATING OVER METAWORDS:
@@ -293,4 +313,5 @@ function convertNahuatl(inString){
 //
 //exports.convertNahuatl = convertNahuatl;
 
+// ES6 export:
 export { convertNahuatl }

@@ -1613,6 +1613,7 @@ const nwt={
 //exports.nwt = nwt;
 //exports.alo = alo;
 
+// ES6 export:
 export { nab , nwt, alo };
 // END OF CODE 
 
