@@ -329,7 +329,7 @@ const alo={
       'pilli',
       'xillan',
       'xilli',
-      'chilli'
+      'ςilli'
     ]
   }
 };
