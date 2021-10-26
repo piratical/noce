@@ -328,7 +328,8 @@ const alo={
       'milli',
       'pilli',
       'xillan',
-      'xilli'
+      'xilli',
+      'chilli'
     ]
   }
 };
