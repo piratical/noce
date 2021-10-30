@@ -74,14 +74,6 @@ function convertNahuatl(inString){
     checked:true
   };
 
-  /*
-  cb_hasler.checked=true; 
-  cb_sep.checked=true;
-  cb_ack.checked=true;
-  cb_trager.checked=true;
-  cb_atom.checked=true;
-  cb_allo.checked=true;
-  */
   ///////////////////////////////////////////
   //
   // SET UP BEFORE ITERATING OVER METAWORDS:
@@ -99,12 +91,16 @@ function convertNahuatl(inString){
   const ll2hlExcluderRegex = new RegExp(ll2hlExcluder);
   
   //
-  // l2LL SETUP
+  // L2LL SETUP
   //
   const l2llExcluder = nwt.arrayToOptionString(alo.l2ll.exclude);
-  console.log(l2llExcluder);
   const l2llExcluderRegex = new RegExp( '(' + l2llExcluder + ')$' );
   
+  //
+  // HK2WK SETUP
+  //
+  const hk2wkExcluder = nwt.arrayToOptionString(alo.hk2wk.exclude);
+  const hk2wkExcluderRegex = new RegExp( '(' + l2llExcluder + ')$' );
   ////////////////////////////////////
   //
   // START ITERATING OVER METAWORDS:
@@ -118,13 +114,19 @@ function convertNahuatl(inString){
     // to remove it altogether ... but it is harmless ...
     //metaWord.atomic = gmn.findGeminate(metaWord.atomic);
 
-    // THE FOLLOWING APPROACH TO GEMINATION MAY BE BETTER:
+    // THE FOLLOWING APPROACH TO RE-GEMINATION MAY BE BETTER:
     // HERE WE RECOGNIZE that in general most words that end in
     // a vowel + li should be geminated. There is a small list
     // of words that should *not* be geminated, and we exclude those:
     if(!metaWord.atomic.match(l2llExcluderRegex)){
       metaWord.atomic = nwt.atomicL2LLGeminator(metaWord.atomic);
     }
+    // THE FOLLOWING CONVERTS DELABIALIZED [h] BACK TO /w/
+    // FOR PRETERIT VERB FORMS:
+    if(!metaWord.atomic.match(hk2wkExcluderRegex)){
+      metaWord.atomic = nwt.atomicHK2WKLabializor(metaWord.atomic);
+    }
+
     
 
     ////////////////////////////////////////

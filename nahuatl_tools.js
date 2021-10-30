@@ -345,6 +345,9 @@ const alo={
     ]
   },
   //////////////////////////////////////////////
+  //
+  // NOTA BENE: The following may apply when the
+  // source orthography is an "F" (phonetic) orthography
   // 
   // NOTA BENE: The following is not an allophone
   // rule, but rather a morphophonemic rule. However
@@ -375,6 +378,29 @@ const alo={
       'κamahmanili',
       'weweyakilwili',
       'λaκalλalili'
+    ]
+  },
+  //////////////////////////////////////////////////////////////
+  //
+  // NOTA BENE: The following may apply when the
+  // source orthography is an "F" (phonetic) orthography.
+  // 
+  // In "F" orthographies, we may see 'pehki', 'pehkeh',
+  // 'kohki' or 'kohkeh'. These are preterit verb forms
+  // where, the first syllable coda /w/ has been delabialized
+  // to [h] because of allophony. This rule is used
+  // to restore the /w/ spelling, e.g. 'peuhqui' etc.
+  // 
+  // However, there are a very few words that we don't want
+  // to convert, and those are shown here in the exclusion
+  // list:
+  //
+  //////////////////////////////////////////////////////////////
+  hk2wk:{
+    exclude:[
+      'awahkeh',
+      'aahki',
+      'ahki'
     ]
   }
 };
@@ -1089,10 +1115,26 @@ const nwt={
     }
     return ipa;
   },
+  // 
+  // atomicL2LLGeminator: Restore gemination
+  // on words sourced from an "F" orthography:
+  //
   atomicL2LLGeminator:function(atomic){
-    const regex = /([aeio])li$/
+    const regex = /([aeio])li$/ ;
     return atomic.replace(regex,function(match,p1){
       return p1 + 'lli';
+    });
+  },
+  //
+  // atomicHK2WKLabializor: Restore the /w/
+  // coda on preterit verb forms sourced from an "F"
+  // orthography, e.g. 'pehki' => 'pewki' (peuhqui);
+  // 'kohki' => 'kowki' (couhqui), etc.
+  //
+  atomicHK2WKLabializor:function(atomic){
+    const regex = /([aeio])hk(i|eh)$/ ;
+    return atomic.replace(regex,function(match,p1,p2){
+      return p1 + 'wk' + p2;
     });
   },
   /////////////////////////////////////////
