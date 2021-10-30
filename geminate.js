@@ -485,7 +485,7 @@ const gmn={
 "ςekeli":"ςekelli",
 "κeli":"κelli",
 "eli":"elli",
-"weli":"welli",
+//"weli":"welli",
 "ikneli":"iknelli",
 "ihτeli":"ihτelli",
 "τehτeli":"τehτelli",

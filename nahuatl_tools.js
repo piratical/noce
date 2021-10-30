@@ -318,9 +318,20 @@ const alo={
   // SOMETHING:
   //
   ll2hl:{
-    // These are the words that
-    // preserve /ll/ as [l]
-    // and do not convert to [hl]:
+    // Words like "illia' and 
+    // 'illamiki' are pronounced as
+    // 'ihlia' and 'ihlamiki', respectively,
+    // because of allophony. The allophony
+    // might depend on vowel length, but vowel
+    // length is not marked (usually).
+    //
+    // Other words, like 'milli' have the '*ill*'
+    // pattern, but are not pronounced with an /h/
+    // preceding the /l/.
+    //
+    // The following are the words that are known
+    // to preserve /ill/ as [il] in ChN
+    // and do not convert to [ihl]:
     // NOTA BENE: THIS IS AN ARRAY OF WORDS
     // TO BE USED IN A REGEX:
     exclude:[
@@ -329,7 +340,41 @@ const alo={
       'pilli',
       'xillan',
       'xilli',
-      'ςilli'
+      'ςilli',
+      'λilli'
+    ]
+  },
+  //////////////////////////////////////////////
+  // 
+  // NOTA BENE: The following is not an allophone
+  // rule, but rather a morphophonemic rule. However
+  // we don't have anywhere else to put it at the 
+  // moment, so it is going here:
+  //
+  // When words end in '[v]l[v]$', should we
+  // geminate the 'l'? In general, the answer
+  // is yes, we should ... except for the 
+  // following words or word patterns that,
+  // according to IDIEZ' Tlahtolxitlauhcayotl
+  // do not geminate. This is therefore an
+  // exclusion list:
+  //
+  //////////////////////////////////////////////
+  l2ll:{
+    exclude:[
+      'piyali',
+      '.*weli',
+      'eeli',
+      'λaeli',
+      'λaλaeli',
+      '.*kokoyoli',
+      'λaxiwiyoli',
+      'λayolli',
+      'yolli',
+      'yoyoli',
+      'κamahmanili',
+      'weweyakilwili',
+      'λaκalλalili'
     ]
   }
 };
@@ -1044,6 +1089,12 @@ const nwt={
     }
     return ipa;
   },
+  atomicL2LLGeminator:function(atomic){
+    const regex = /([aeio])li$/
+    return atomic.replace(regex,function(match,p1){
+      return p1 + 'lli';
+    });
+  },
   /////////////////////////////////////////
   //
   // atomicToDegeminate: Removes geminated
@@ -1602,7 +1653,7 @@ const nwt={
     let os = '';
     for(let i=0; i< arr.length ; i++){
       os += arr[i];
-      if(i<alo.ll2hl.exclude.length-1){
+      if(i<arr.length-1){
         os += '|';
       }
     }

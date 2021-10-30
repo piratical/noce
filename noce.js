@@ -98,6 +98,13 @@ function convertNahuatl(inString){
   const ll2hlExcluder = nwt.arrayToOptionString(alo.ll2hl.exclude);
   const ll2hlExcluderRegex = new RegExp(ll2hlExcluder);
   
+  //
+  // l2LL SETUP
+  //
+  const l2llExcluder = nwt.arrayToOptionString(alo.l2ll.exclude);
+  console.log(l2llExcluder);
+  const l2llExcluderRegex = new RegExp( '(' + l2llExcluder + ')$' );
+  
   ////////////////////////////////////
   //
   // START ITERATING OVER METAWORDS:
@@ -109,7 +116,16 @@ function convertNahuatl(inString){
     // EXPERIMENTAL: See if the word should have a geminated consonant:
     // NB: This has only limited utility at the moment. Might be better
     // to remove it altogether ... but it is harmless ...
-    metaWord.atomic = gmn.findGeminate(metaWord.atomic);
+    //metaWord.atomic = gmn.findGeminate(metaWord.atomic);
+
+    // THE FOLLOWING APPROACH TO GEMINATION MAY BE BETTER:
+    // HERE WE RECOGNIZE that in general most words that end in
+    // a vowel + li should be geminated. There is a small list
+    // of words that should *not* be geminated, and we exclude those:
+    if(!metaWord.atomic.match(l2llExcluderRegex)){
+      metaWord.atomic = nwt.atomicL2LLGeminator(metaWord.atomic);
+    }
+    
 
     ////////////////////////////////////////
     //
@@ -126,10 +142,6 @@ function convertNahuatl(inString){
     if(!allophonic.match(ll2hlExcluderRegex)){
       allophonic = nwt.atomicAllophoneLL2HL(allophonic);
     }
-    // DEBUG:
-    //else{
-    //  console.log(`${allophonic} was excluded from LL=>LH rule`);
-    //}
     
     //
     // TERMINAL /n/ TO [h] RULE:
