@@ -31,19 +31,38 @@ import { gmn } from './geminate.js';
 // => This pipeline now generally handles capitalization and
 //    punctuation correctly.
 //
+// => THE GENERAL APPROACH HERE IS AS FOLLOWS:
+//
+//    1. We split the input string into METAWORDs. METAWORDs
+//       have an element which places the word into the normalized
+//       ATOMIC orthography.
+//
+//    2. We don't know if the input string was provided in an
+//       "M" (morphophonemic) or "F" (phonetic) orthography, but
+//       what we try to do is convert the input, to the extent
+//       possible, into an "M" morphonemic form. This entails
+//       making sure, *inter alia*, that words like 'kali' and 'kuali' are 
+//       geminated to the "M"-form 'kalli' and 'kualli', respectively.
+//
+//    3. Once we have the ATOMIC words in "M" form (or as close to 
+//       "M" form as we can get, then we can also construct an
+//       ALLOPHONIC "F" form, also in the ATOMIC orthography.
+//
+//    4. With both "M" and "F" forms available, it is a straightforward
+//       task to output the entire string in any "M" or "F" orthography.
+//
+//    5. We can also build "M"-based and "F"-based international
+//       phonetic alphabet (IPA) outputs.  The "M" based output is
+//       simply called "IPA" while the "F"-based output is here 
+//       called "IPH".
+//
 ////////////////////////////////////////////////////////////////
 function convertNahuatl(inString){
 
-  //const inString = ta_inp.value;
   if(!inString){
     return;
   }
   
-  // 2021.10.12.ET: NFC Normalization moved here:
-  // NFC in particular is needed to recognize the long vowels
-  // correctly:
-  const metaWords = nwt.splitToMetaWords(inString.normalize('NFC'));
-
   // CREATE RESULT SET CONTAINERS:
   let hmod=''; // Hasler Modern
   let sep =''; // SEP
@@ -81,7 +100,9 @@ function convertNahuatl(inString){
   ///////////////////////////////////////////
 
   //
-  // LL2HL SETUP:
+  // LL2HL SETUP: Allophone rule for words like 
+  // 'illia' and 'illamiki' which become 'ihlia' and
+  // 'ihlamiqui' respectively.
   //
   // NOTA BENE: For this rule, we need to construct
   // a regex because the "exclude" words might have
@@ -91,16 +112,28 @@ function convertNahuatl(inString){
   const ll2hlExcluderRegex = new RegExp(ll2hlExcluder);
   
   //
-  // L2LL SETUP
+  // L2LL SETUP: Geminate words like 'kali' to 'kalli' etc.
   //
   const l2llExcluder = nwt.arrayToOptionString(alo.l2ll.exclude);
   const l2llExcluderRegex = new RegExp( '(' + l2llExcluder + ')$' );
   
   //
-  // HK2WK SETUP
+  // HK2WK SETUP: Back convert preterit verb forms like 'pehki' to 'pewki'
   //
   const hk2wkExcluder = nwt.arrayToOptionString(alo.hk2wk.exclude);
   const hk2wkExcluderRegex = new RegExp( '(' + l2llExcluder + ')$' );
+
+  ///////////////////////////////////////////////////////////////////
+  // 
+  // SPLIT STRING INTO METAWORDS:
+  //
+  // 2021.10.12.ET: NFC Normalization moved here:
+  // NFC in particular is needed to recognize the 
+  // long vowels correctly.
+  //
+  ///////////////////////////////////////////////////////////////////
+  const metaWords = nwt.splitToMetaWords(inString.normalize('NFC'));
+
   ////////////////////////////////////
   //
   // START ITERATING OVER METAWORDS:
@@ -115,32 +148,60 @@ function convertNahuatl(inString){
     //metaWord.atomic = gmn.findGeminate(metaWord.atomic);
 
     // THE FOLLOWING APPROACH TO RE-GEMINATION MAY BE BETTER:
+    
+    ////////////////////////////////////////////////////////////////////
+    //
+    // "F" TO "M" RULE: [AEIO]LI => [AEIO]LLI
+    //
     // HERE WE RECOGNIZE that in general most words that end in
     // a vowel + li should be geminated. There is a small list
     // of words that should *not* be geminated, and we exclude those:
+    //
+    ////////////////////////////////////////////////////////////////////
     if(!metaWord.atomic.match(l2llExcluderRegex)){
       metaWord.atomic = nwt.atomicL2LLGeminator(metaWord.atomic);
     }
-    // THE FOLLOWING CONVERTS DELABIALIZED [h] BACK TO /w/
-    // FOR PRETERIT VERB FORMS:
+    ////////////////////////////////////////////////////////////////////
+    //
+    // "F" TO "M" RULE: HK(I|EH) => WK(I|EH)
+    //
+    // Preterit verb forms like 'pehki' and 'kohkeh' are derived from
+    // verbs whose stems end in /w/: pewa, kowa, etc. Therefore, we should
+    // safely be able to back-convert the [h] in the coda of the syllable
+    // preceding the preterit ending ki (singular) or keh (plural) to
+    // the labialized (rounded lips) /w/ phoneme:
+    //
+    ////////////////////////////////////////////////////////////////////
     if(!metaWord.atomic.match(hk2wkExcluderRegex)){
       metaWord.atomic = nwt.atomicHK2WKLabializor(metaWord.atomic);
     }
-
+    ////////////////////////////////////////////////////////////////////
+    //
+    // "F" TO "M" RULE: TERMINAL "H" => TERMINAL "N"
+    //
+    // NOTA BENE: This rule is hard to do comprehensively. But we
+    // can most certainly handle the easy cases like 'tzih' => 'tzin',
+    // etc.:
+    //
+    ////////////////////////////////////////////////////////////////////
+    metaWord.atomic = nwt.atomicAllophoneH2N(metaWord.atomic);
     
-
-    ////////////////////////////////////////
+    ////////////////////////////////////////////////
     //
-    // "F" (PHONETIC) ORTHOGRAPHIES:
-    //
-    ////////////////////////////////////////
+    // SET UP 'allophonic' TO HOLD THE ALLOPHONIC
+    // VERSION OF EVERYTHING. This is the version in 
+    // which all allophone rules are applied for "F"
+    // phonetic orthographies like SEP and Hasler.
     //
     // APPLY ALLOPHONE RULES, EXCEPT WHEN EXCLUSIONS APPLY:
     //
+    ////////////////////////////////////////////////
     let allophonic = metaWord.atomic;
+    
     //
-    // /ll/ TO [hl] RULE:
-   
+    // /ll/ TO [hl] RULE: For verbs like 'illia'=>'ihlia'
+    // and 'illamiki'=>'ihlamiki'
+    //
     if(!allophonic.match(ll2hlExcluderRegex)){
       allophonic = nwt.atomicAllophoneLL2HL(allophonic);
     }

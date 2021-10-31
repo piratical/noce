@@ -1255,29 +1255,37 @@ const nwt={
     });
     return atomic;
   },
-  /////////////////////////////////////////////
+  /////////////////////////////////////////////////////
   //
-  // atomicAllophoneH2N
+  // atomicAllophoneH2N: Convert words ending in [h]
+  // back to words ending in /n/
+  // 
+  // This is an "F" => "M" rule.
   //
-  /////////////////////////////////////////////
+  /////////////////////////////////////////////////////
   atomicAllophoneH2N:function(atomic){
     // Conversion in this direction will be
     // much harder to get right:
-    // 1.
+    // 1. TZIH => TZIN : conetzin, etc.
     atomic = atomic.replace(/tzih?\b/g,'tzin');
-    // 2.
-    atomic = atomic.replace(/ςih\b/g,'ςin'); // michin, cuatochin etc.
-    // 2.1. But if "lechih" or "pechih" were accidently converted, back convert them:
-    atomic = atomic.replace(/leςin\b/,'leςih');
-    atomic = atomic.replace(/peςin\b/,'peςih');
-    // 3.
-    atomic = atomic.replace(/lih\b/g,'lin');
-    // 3.1. But if "kikilih" was accidently converted, back convert:
-    atomic = atomic.replace(/kikilin\b/,'kikilih');
-    // 4.
-    atomic = atomic.replace(/tin\b/,'tih');
-    // 4.1 But back convert misconversions:
-    
+    // 2. CHIH => CHIN: michin, kuatochin, etc.
+    // There are only 2 words in IDIEZ Tlahtolxitlauhcayotl that
+    // actually end in 'chih': lechih (prestado de español 'leche', milk) and 'Pechih'
+    // (tokayotl tlen Pedro). So we don't convert those two words:
+    if(!atomic.match(/[lp]eςih\b/)){
+      atomic = atomic.replace(/ςih\b/g,'ςin');
+    }
+    // 3. LIH => LIN: totolin, etc.
+    // There are only 2 words in IDIEZ TXC that end in 'kikilih'
+    // which we avoid converting:
+    if(!atomic.match(/kikilih\b/)){
+      atomic = atomic.replace(/lih\b/g,'lin');
+    }
+    // 4. TIH => TIN: inihwantin, inmowantin, tohwantin
+    // There are 2 words in IDIEZ TXC that end in 'tih' which we avoid:
+    if(!atomic.match(/(teκesiwiltih|temahmawtih)\b/)){
+      atomic = atomic.replace(/tih\b/,'tin');
+    }
     return atomic;
   },
   /////////////////////////////////////////
@@ -1557,14 +1565,6 @@ const nwt={
     prefixSet:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
     postfixSet:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\''
   },
-  /////////////////////////////////
-  //
-  // stripPunctuation:
-  //
-  /////////////////////////////////
-  //stripPunctuation:function(s){
-  //  return s.replace(nwt.punctuation.all,'ug'));
-  //},
 
   /////////////////////////////////
   //
@@ -1702,10 +1702,6 @@ const nwt={
     return os;
   }
 };
-
-//exports.nab = nab;
-//exports.nwt = nwt;
-//exports.alo = alo;
 
 // ES6 export:
 export { nab , nwt, alo };
