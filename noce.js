@@ -115,7 +115,8 @@ function convertNahuatl(inString){
   // L2LL SETUP: Geminate words like 'kali' to 'kalli' etc.
   //
   const l2llExcluder = nwt.arrayToOptionString(alo.l2ll.exclude);
-  const l2llExcluderRegex = new RegExp( '(' + l2llExcluder + ')$' );
+  // NOTA BENE HOW WE HAVE ADDED "ELI" AS AN ISOLATED WORD HERE:
+  const l2llExcluderRegex = new RegExp( '^eli$|(' + l2llExcluder + ')$' );
   
   //
   // HK2WK SETUP: Back convert preterit verb forms like 'pehki' to 'pewki'
@@ -156,7 +157,7 @@ function convertNahuatl(inString){
     // HERE WE RECOGNIZE that in general most words that end in
     // a vowel + li should be geminated. There is a small list
     // of words that should *not* be geminated, and we exclude those:
-    //
+    // 
     ////////////////////////////////////////////////////////////////////
     if(!metaWord.atomic.match(l2llExcluderRegex)){
       metaWord.atomic = nwt.atomicL2LLGeminator(metaWord.atomic);
