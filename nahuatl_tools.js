@@ -1132,7 +1132,11 @@ const nwt={
   // 'kohki' => 'kowki' (couhqui), etc.
   //
   atomicHK2WKLabializor:function(atomic){
-    const regex = /([aeio])hk(i|eh)$/ ;
+    // Originally we had just this: const regex = /([aeio])hk(i|eh)$/ ;
+    // ... but that approach turned out to be overly zealous. Here
+    // we attempt to limit the back-conversion to known "-hua" verbs like "pewa"
+    // "kowa", etc.:
+    const regex = /(ala|kana|ka|se|ςipa|ςi|ςo|sia|si|ko|κahκa|κite|e|wapa|itonalpote|li|lo|ma|maxihxiλa|mela|me|mole|ne|ni|paλa|pe|pina|piτa|pohye|poke|po|ki|tila|λaxλa|λiκeti|τa|τi|xa|xiλa|xi|ya|yo|sa|soλa|so)hk(i|eh)$/ ;
     return atomic.replace(regex,function(match,p1,p2){
       return p1 + 'wk' + p2;
     });
