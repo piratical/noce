@@ -177,6 +177,20 @@ function convertNahuatl(inString){
     }
     ////////////////////////////////////////////////////////////////////
     //
+    // "F" TO "M" RULE: TERMINAL "H" => TERMINAL "W"
+    //
+    // This covers common words like 'tonatih' and '-coneh'
+    //
+    // The list of included words that will be converted is quite small
+    // and may not be comprehensive. 
+    //
+    // NOTA BENE: This MUST precede the call to nwt.atomicAllophoneH2N()
+    //
+    ////////////////////////////////////////////////////////////////////
+    metaWord.atomic = nwt.atomicAllophoneH2W(metaWord.atomic);
+    
+    ////////////////////////////////////////////////////////////////////
+    //
     // "F" TO "M" RULE: TERMINAL "H" => TERMINAL "N"
     //
     // NOTA BENE: This rule is hard to do comprehensively. But we

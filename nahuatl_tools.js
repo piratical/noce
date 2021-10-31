@@ -1257,6 +1257,24 @@ const nwt={
   },
   /////////////////////////////////////////////////////
   //
+  // atomicAllophoneH2W: Convert words ending in [h]
+  // back to words ending in /w/:
+  //
+  // This is an "F" => "M" rule.
+  //
+  // This handles the very common word 'tonatih'=>'tonatiw'
+  // and a small set of other words that end in /w/ which
+  // are often written in "F" orthographies with just [h]:
+  //
+  /////////////////////////////////////////////////////
+  atomicAllophoneH2W:function(atomic){
+    if(atomic.match(/(peτikih|tonatih|koneh)\b/)){
+      atomic = atomic.replace(/h\b/,'w');
+    }
+    return atomic;
+  },
+  /////////////////////////////////////////////////////
+  //
   // atomicAllophoneH2N: Convert words ending in [h]
   // back to words ending in /n/
   // 
@@ -1267,22 +1285,22 @@ const nwt={
     // Conversion in this direction will be
     // much harder to get right:
     // 1. TZIH => TZIN : conetzin, etc.
-    atomic = atomic.replace(/tzih?\b/g,'tzin');
+    atomic = atomic.replace(/tzih?\b/,'tzin');
     // 2. CHIH => CHIN: michin, kuatochin, etc.
     // There are only 2 words in IDIEZ Tlahtolxitlauhcayotl that
     // actually end in 'chih': lechih (prestado de español 'leche', milk) and 'Pechih'
     // (tokayotl tlen Pedro). So we don't convert those two words:
     if(!atomic.match(/[lp]eςih\b/)){
-      atomic = atomic.replace(/ςih\b/g,'ςin');
+      atomic = atomic.replace(/ςih\b/,'ςin');
     }
     // 3. LIH => LIN: totolin, etc.
     // There are only 2 words in IDIEZ TXC that end in 'kikilih'
     // which we avoid converting:
     if(!atomic.match(/kikilih\b/)){
-      atomic = atomic.replace(/lih\b/g,'lin');
+      atomic = atomic.replace(/lih\b/,'lin');
     }
     // 4. TIH => TIN: inihwantin, inmowantin, tohwantin
-    // There are 2 words in IDIEZ TXC that end in 'tih' which we avoid:
+    // There are 2 words in IDIEZ TXC that end in 'tih' which we avoid.
     if(!atomic.match(/(teκesiwiltih|temahmawtih)\b/)){
       atomic = atomic.replace(/tih\b/,'tin');
     }
