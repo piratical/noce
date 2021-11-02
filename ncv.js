@@ -21,7 +21,7 @@ const optionList = 'all ack hasler sep trager ipa iph atom allo';
 
 function printUsage(){
   console.log('ncv (c) 2021 by Edward H. Trager. All Rights Reserved.');
-  console.log(`USAGE: node ${process.argv[1]} <orthography> <file or phrase>`);
+  console.log(`USAGE: node ncv.js <orthography> <file or phrase>`);
   console.log(`       orthography options: ${optionList}`);
 }
 
@@ -43,7 +43,8 @@ let input='';
 // Synchronous file reading is good enough for now:
 if(fs.existsSync(fileOrPhrase)){
  // Read file:
- input = fs.readFileSync(fileOrPhrase);
+ const buffer = fs.readFileSync(fileOrPhrase);
+ input = buffer.toString();
 }else{
  input=fileOrPhrase;
 }
