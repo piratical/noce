@@ -1304,8 +1304,10 @@ const nwt={
       atomic = atomic.replace(/lih\b/,'lin');
     }
     // 4. TIH => TIN: inihwantin, inmowantin, tohwantin
-    // There are 2 words in IDIEZ TXC that end in 'tih' which we avoid.
-    if(!atomic.match(/(teκesiwiltih|temahmawtih)\b/)){
+    // Since plural verb forms like 'titekitih' end in 'tih',
+    // It is better to specify exactly the set of words we can safely 
+    // convert. The following limited set may expand in the future:
+    if(atomic.match(/(inihwantih|inmowantih|tohwantih)\b/)){
       atomic = atomic.replace(/tih\b/,'tin');
     }
     return atomic;
