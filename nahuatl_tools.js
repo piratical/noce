@@ -1326,6 +1326,7 @@ const nwt={
   //////////////////////////////////////////
   atomicToPhoneticSyllabified:function(atomic){
     let sylab = '';
+    const syllableSeparator='·';
     for(let i=0;i<atomic.length;i++){
       const current = atomic[i];
       if(nwt.isAtomicVowel(current) 
@@ -1334,19 +1335,19 @@ const nwt={
         && nwt.isAtomicVowel(atomic[i+2]) ){
         // VCV pattern => V.CV
         sylab += current;
-        sylab += '.';
+        sylab += syllableSeparator;
       }else if(nwt.isAtomicConsonant(current) 
         && i<atomic.length 
         && nwt.isAtomicConsonant(atomic[i+1])){
         // CC pattern => C.C
         sylab += current;
-        sylab += '.';
+        sylab += syllableSeparator;
       }else if(nwt.isAtomicVowel(current)
         && i< atomic.length
         && nwt.isAtomicVowel(atomic[i+1])){
         // VV pattern => V.V
         sylab += current;
-        sylab += '.';
+        sylab += syllableSeparator;
       }else{
         // pass through:
         sylab += current;
@@ -1374,7 +1375,7 @@ const nwt={
           s = [marker,s].join('');
           return s;
         }
-      }else if(letterSeen && ( s[i]==='.')){
+      }else if(letterSeen && ( s[i]==='.' || s[i]==='·')){
         syllableCount++;
         if(syllableCount===2){
           // Mark penultimate syllable 
