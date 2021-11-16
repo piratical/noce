@@ -385,7 +385,9 @@ function convertNahuatl(inString){
   atom = atom.trim();
   allo = allo.trim();
   // 2021.10.12.ET Addendum: Fill in IPA Phonetic based on the allo data:
-  iph  = nwt.atomicToIPAPhonetic(allo);
+  // 2021.11.15.ET Addendum: Also iph needs to be all lower-case, just like IPA:
+  iph  = nwt.atomicToIPAPhonetic(allo.toLowerCase());
+  
   return { 
     ack:ack,
     trager:tmod,
