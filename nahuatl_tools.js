@@ -1585,9 +1585,14 @@ const nwt={
       return false;
     }
   },
+  zeroWidthTags:{
+    // 2021.11.19.ET: Added \u200B ZERO WIDTH SPACE as a special fixedNameMarker:
+    fixedNameMarker:'\u200B',
+  },
   punctuation:{
     all:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
-    prefixSet:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
+    // 2021.11.19.ET: zeroWidthTags must be in the prefixSet:
+    prefixSet:'\u200B.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
     postfixSet:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\''
   },
 
@@ -1634,7 +1639,6 @@ const nwt={
     for(;i<s.length;i++){
       r.postfix += s[i];
     }
-    
     // RETURN THE RESULT OBJECT:
     return [ r.prefix , r.word, r.postfix ];
   },
@@ -1673,7 +1677,7 @@ const nwt={
     for(let word of words){
       const mw = {}; // meta-word object
       mw.original       = word;
-      // TEMPORARY FIX:
+      // Segregate prefixed and/or postfixed "punctuation" from the word itself::
       [ mw.prefixed, mw.word, mw.postfixed ] = nwt.segregatePunctuation(mw.original);
       // DEBUG:
       // console.log(`=====\npre:${mw.prefixed} * word:${mw.word} * post:${mw.postfixed}`);
@@ -1691,6 +1695,20 @@ const nwt={
       mw.isDeity        = nwt.isDeity( mw.atomic );
       // Now using the much more comprehensive names.js module:
       mw.isPerson       = nms.isName( mw.word );
+      //
+      // Detect the "immutable" name tag (\u200B which is just a UNICODE ZERO WIDTH SPACE, "ZWS"):
+      //
+      mw.isImmutableName = false;
+      if(mw.prefixed.match('\u200B')){
+        // Set the state flag for the immutable name:
+        mw.isImmutableName = true;
+        // ... but strip the immutableName marker from (1) the original
+        // and also from (2) mw.prefixed because in some contexts 
+        // (such as some terminal environments)
+        // the ZWS show as regular width spaces, so:
+        mw.original = mw.original.replace(/\u200B/g,'');
+        mw.prefixed = mw.prefixed.replace(/\u200B/g,'');
+      }
       metaWords.push( mw );
     }
     //console.log('=== DEBUG ===');

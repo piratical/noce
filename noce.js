@@ -287,7 +287,19 @@ function convertNahuatl(inString){
     //    If the original was capitalized,
     //    capitalize it again:
     //
-    if(metaWord.flic){
+    // 2021.11.19.ET: Handle immutable names
+    // to prevent spelling changes:
+    if(metaWord.isImmutableName){
+      // DEBUG: console.log(`IMMUTABLE: |${metaWord.word}|`);
+      hmod += metaWord.word;
+      sep  += metaWord.word;
+      ack  += metaWord.word;
+      ipa  += metaWord.word;
+      atom += metaWord.word;
+      allo += metaWord.word;
+      tmod += metaWord.word;
+      
+    }else if(metaWord.flic){
       // FLIC: First letter is capitalized, so:
       
       // Hasler Modern:
@@ -302,7 +314,7 @@ function convertNahuatl(inString){
       atom += cb_atom.checked   ? nwt.capitalize(aatom) : metaWord.original;
       // ALLO:
       allo += cb_allo.checked   ? nwt.capitalize(allophonic) : metaWord.original;
-
+      
       // TRAGER:
       if(cb_trager.checked){
         ///////////////////////////////////////////////////////////////////////////
