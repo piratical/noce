@@ -289,6 +289,10 @@ function convertNahuatl(inString){
     //
     // 2021.11.19.ET: Handle immutable names
     // to prevent spelling changes:
+    // 
+    // However, since Trager's orthography uses
+    // non-Latin symbols, we *do* want to convert tmod:
+    //
     if(metaWord.isImmutableName){
       // DEBUG: console.log(`IMMUTABLE: |${metaWord.word}|`);
       hmod += metaWord.word;
@@ -297,7 +301,27 @@ function convertNahuatl(inString){
       ipa  += metaWord.word;
       atom += metaWord.word;
       allo += metaWord.word;
-      tmod += metaWord.word;
+      //
+      // In the case of Trager orthography, we *DO*
+      // want to convert and, since we know with certainty
+      // that it is a name, we can prefix it with a name
+      // prefix:
+      //
+      if( metaWord.isDeity ){
+        // a diety:
+        tmod += nab.prefixDeity + ttmod;
+      }else if( metaWord.isPlace ){
+        // a place name:
+        tmod += nab.prefixPlace + ttmod;
+      }else if( metaWord.isPerson ){
+        // Actually this could be any proper noun that is not a diety or place name:
+        tmod += nab.prefixName + ttmod;
+      }else{
+        // We know it is a name, but not sure
+        // what kind of name: It is best to prefix
+        // it with the generic name prefix:
+        tmod += nab.prefixName + ttmod;
+      }
       
     }else if(metaWord.flic){
       // FLIC: First letter is capitalized, so:
@@ -331,7 +355,6 @@ function convertNahuatl(inString){
           // Quite likely a place name:
           tmod += nab.prefixPlace + ttmod;
         }else if( metaWord.isPerson ){
-          //console.log('processing person '+metaWord.original);
           tmod += nab.prefixName + ttmod;
         }else{
           tmod += ttmod;

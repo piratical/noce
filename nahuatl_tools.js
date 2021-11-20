@@ -272,6 +272,16 @@ nab.map={
     'ei':nab.vowelSignEI,
     'io':nab.vowelSignIO,
     'ao':nab.vowelSignAO,
+  },
+  // 2021.11.20.ET ADDENDUM: zero width "tags"
+  // to explicitly indicate immutable names, etc.:
+  zeroWidthTag:{
+    immutableName:'\u200B',      // using UNICODE ZWS  as the generic or person name tag
+    immutablePlaceName:'\u200C', // using UNICODE ZWNJ as the place name tag
+    immutableDietyName:'\u200D' //, // using UNICODE ZWJ  as the diety name tag
+    //'\u200B':nab.prefixName , // using UNICODE ZWS  as the generic or person name tag
+    //'\u200C':nab.prefixPlace, // using UNICODE ZWNJ as the place name tag
+    //'\u200D':nab.prefixDiety, // using UNICODE ZWJ  as the diety name tag
   } 
 };
 /////////////////////////////////////
@@ -1591,8 +1601,8 @@ const nwt={
   },
   punctuation:{
     all:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
-    // 2021.11.19.ET: zeroWidthTags must be in the prefixSet:
-    prefixSet:'\u200B.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
+    // 2021.11.19.ET: the new zeroWidthTags must be in the prefixSet:
+    prefixSet:'\u200B\u200C\u200D.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
     postfixSet:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\''
   },
 
@@ -1696,18 +1706,35 @@ const nwt={
       // Now using the much more comprehensive names.js module:
       mw.isPerson       = nms.isName( mw.word );
       //
-      // Detect the "immutable" name tag (\u200B which is just a UNICODE ZERO WIDTH SPACE, "ZWS"):
+      // Detect the "immutable" name tags:
       //
       mw.isImmutableName = false;
-      if(mw.prefixed.match('\u200B')){
+      if(mw.prefixed.match( nab.map.zeroWidthTag.immutableName )){
         // Set the state flag for the immutable name:
         mw.isImmutableName = true;
+        // 2021.11.20.ET NOTA BENE: "isPerson" may not be a person
+        // but rather still is a proper name of something:
+        mw.isPerson        = true;
         // ... but strip the immutableName marker from (1) the original
         // and also from (2) mw.prefixed because in some contexts 
         // (such as some terminal environments)
         // the ZWS show as regular width spaces, so:
         mw.original = mw.original.replace(/\u200B/g,'');
         mw.prefixed = mw.prefixed.replace(/\u200B/g,'');
+      }
+      if(mw.prefixed.match( nab.map.zeroWidthTag.immutablePlaceName )){
+        mw.isImmutableName = true;
+        mw.isPlace         = true;
+        mw.isPerson        = false;
+        mw.original = mw.original.replace(/\u200C/g,'');
+        mw.prefixed = mw.prefixed.replace(/\u200C/g,'');
+      }
+      if(mw.prefixed.match( nab.map.zeroWidthTag.immutableDietyName )){
+        mw.isImmutableName = true;
+        mw.isDiety         = true;
+        mw.isPerson        = false;
+        mw.original = mw.original.replace(/\u200D/g,'');
+        mw.prefixed = mw.prefixed.replace(/\u200D/g,'');
       }
       metaWords.push( mw );
     }
