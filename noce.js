@@ -72,33 +72,13 @@ function convertNahuatl(inString){
   let atom=''; // Atomic
   let allo=''; // Allophonic
   let iph =''; // IPA *PHONETIC* <= This is much better than the plain old IPA because it is based on the allophones
-
-  // "Check boxes" to determine if capitalized words should be converted or not:
-  const cb_hasler={
-    checked:true
-  };
-  const cb_sep={
-    checked:true
-  };
-  const cb_ack={
-    checked:true
-  };
-  const cb_trager={
-    checked:true
-  };
-  const cb_atom={
-    checked:true
-  };
-  const cb_allo={
-    checked:true
-  };
-
+  
   ///////////////////////////////////////////
   //
   // SET UP BEFORE ITERATING OVER METAWORDS:
   //
   ///////////////////////////////////////////
-
+  
   //
   // LL2HL SETUP: Allophone rule for words like 
   // 'illia' and 'illamiki' which become 'ihlia' and
@@ -287,13 +267,14 @@ function convertNahuatl(inString){
     //    If the original was capitalized,
     //    capitalize it again:
     //
-    // 2021.11.19.ET: Handle immutable names
+    // 2021.11.20.ET: Handle immutable words
     // to prevent spelling changes:
     // 
     // However, since Trager's orthography uses
-    // non-Latin symbols, we *do* want to convert tmod:
+    // non-Latin symbols, we *do* want to convert tmod
+    // "immutable"s:
     //
-    if(metaWord.isImmutableName){
+    if(metaWord.isImmutable){
       // DEBUG: console.log(`IMMUTABLE: |${metaWord.word}|`);
       
       // Because names are tagged as "immutable",
@@ -306,75 +287,62 @@ function convertNahuatl(inString){
       atom += metaWord.word;
       allo += metaWord.word;
       //
-      // In the case of Trager orthography, we *DO*
-      // want to convert and, since we know with certainty
-      // that it is a name, we can prefix it with a name
-      // prefix:
+      // However —as mentioned— in the case of Trager orthography, 
+      // we *DO* want to convert and, since we know with certainty
+      // that it is an immutable, we also check whether we can 
+      // prefix the word with a properName, place, or deity prefix:
       //
-      if( metaWord.isDeity ){
-        // a diety:
+      if( metaWord.isDeityName ){
         //console.log(`DEITY: ${metaWord.word}`);
         tmod += nab.prefixDeity + ttmod;
-      }else if( metaWord.isPlace ){
-        // a place name:
+      }else if( metaWord.isPlaceName ){
         //console.log(`PLACE: ${metaWord.word}`);
         tmod += nab.prefixPlace + ttmod;
-      }else if( metaWord.isPerson ){
-        // Actually this could be any proper noun that is not a diety or place name:
+      }else if( metaWord.isProperName ){
         //console.log(`PROPER NOUN: ${metaWord.word}`);
         tmod += nab.prefixName + ttmod;
       }else{
-        // We know it is a name, but not sure
-        // what kind of name: It is best to prefix
-        // it with the generic name prefix:
+        // We know only that it is immutable, 
+        // but we do not know for sure what kind of name 
+        // it is. At this point, we think it is best to 
+        // prefix it with the generic name prefix:
         //console.log(`NOT SURE WHAT KIND OF NAME: ${metaWord.word}`);
-        tmod += nab.prefixName + ttmod;
+        tmod += nab.prefixName +nab.prefixName + ttmod;
       }
       
     }else if(metaWord.flic){
       // FLIC: First letter is capitalized, so:
       
       // Hasler Modern:
-      hmod += cb_hasler.checked ? nwt.capitalize(hhmod) : metaWord.original;
+      hmod += nwt.capitalize(hhmod);
       // SEP:
-      sep  += cb_sep.checked    ? nwt.capitalize(ssep ) : metaWord.original;
+      sep  += nwt.capitalize(ssep );
       // ACK:
-      ack  += cb_ack.checked    ? nwt.capitalize(aack ) :  metaWord.original;
+      ack  += nwt.capitalize(aack );
       // IPA: ignore capitalization for IPA:
       ipa  += iipa;
       // ATOM: Treat just like the others so that examples with names can be atomized:
-      atom += cb_atom.checked   ? nwt.capitalize(aatom) : metaWord.original;
+      atom += nwt.capitalize(aatom);
       // ALLO:
-      allo += cb_allo.checked   ? nwt.capitalize(allophonic) : metaWord.original;
-      
-      // TRAGER:
-      if(cb_trager.checked){
-        ///////////////////////////////////////////////////////////////////////////
-        //
-        // TRAGER 
-        //
-        // NOTA BENE: Test for deity first because a few deity names look like 
-        // they have place name suffixes:
-        //
-        ///////////////////////////////////////////////////////////////////////////
-        if( metaWord.isDeity ){
-          tmod += nab.prefixDeity + ttmod;
-        }else if( metaWord.isPlace ){
-          // Quite likely a place name:
-          tmod += nab.prefixPlace + ttmod;
-        }else if( metaWord.isPerson ){
-          tmod += nab.prefixName + ttmod;
-        }else{
-          tmod += ttmod;
-        }
+      allo += nwt.capitalize(allophonic);
+      //
+      // TRAGER ORTHOGRAPHY does not capitalize but uses symbolic prefixes
+      //
+      // NOTA BENE: Test for deity first because a few deity names look like 
+      // they have place name suffixes:
+      //
+      if( metaWord.isDeityName ){
+        tmod += nab.prefixDeity + ttmod;
+      }else if( metaWord.isPlaceName ){
+        tmod += nab.prefixPlace + ttmod;
+      }else if( metaWord.isProperName ){
+        tmod += nab.prefixName + ttmod;
       }else{
-        // Checkbox *NOT* checked, so don't convert. But for Trager, if
-        // it does not register as a diety or name or place, then *DO* convert:
-        if( metaWord.isDeity || metaWord.isPerson || metaWord.isPlace ){
-          tmod += metaWord.original;
-        }else{
-          tmod += ttmod;
-        }
+        // Capitalized but classified:
+        // This occurs at the beginnings of
+        // sentences and is normal, so
+        // just add the word with no prefix:
+        tmod += ttmod;
       }
     }else{
       // NOT CAPITALIZED:

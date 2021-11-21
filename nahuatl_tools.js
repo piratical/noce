@@ -273,12 +273,32 @@ nab.map={
     'io':nab.vowelSignIO,
     'ao':nab.vowelSignAO
   },
-  // 2021.11.20.ET ADDENDUM: zero width "tags"
-  // to explicitly indicate immutable names, etc.:
+  /////////////////////////////////////////////////////////////////////////////////
+  //
+  // Zero width "tags" to explicitly indicate proper names and immutability.
+  // 
+  // These "tags" can be embedded directly in "plain text" to indicate a proper
+  // name and whether the spelling of that proper name is "immutable".
+  // 
+  // There are 2 use cases for these tags:
+  // 
+  // (1) In a Nahuatl text written in a Latin-based orthography, we can mark
+  //     proper names like "Santiago" or place names like "San Luis Potosi" as 
+  //     "immutable" in order to prevent re-spelling rules when converting across
+  //     orthographies. Thus, in the ACK orthography, we can prevent respellings
+  //     like "Zantiago" and "Zan Luiz Potozi".
+  //     
+  // (2) For the Trager orthography, which does not distinguish between lower-case
+  //     and upper-case, special prefixes are used to indicate proper names, place
+  //     names, and deity names. These tags can be used to tell the conversion
+  //     engine about such names.
+  //     
+  /////////////////////////////////////////////////////////////////////////////////
   zeroWidthTag:{
-    immutableName:'\u200B',      // using UNICODE ZWS  as the generic or person name tag
-    immutablePlaceName:'\u200C', // using UNICODE ZWNJ as the place name tag
-    immutableDeityName:'\u200D' //, // using UNICODE ZWJ  as the deity name tag
+    properName:'\u200B', // using UNICODE ZWS  as the proper name    tag
+    placeName:'\u200C',  // using UNICODE ZWNJ as the place name     tag
+    deityName:'\u200D',  // using UNICODE ZWJ  as the deity name     tag
+    isImmutable:'\u200E' // using UNICODE LRM  as the "is immutable" tag
   } 
 };
 /////////////////////////////////////
@@ -1595,10 +1615,11 @@ const nwt={
   punctuation:{
     all:'.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
     // 2021.11.19.ET: the new zeroWidthTags must be in the prefixSet:
-    //prefixSet: nab.map.zeroWidthTag.immutableName  +
-    //           nab.map.zeroWidthTag.immutablePlace +
-    //           nab.map.zeroWidthTag.immutableDeity +
-    prefixSet:'\u200B\u200C\u200D\n\r.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
+    prefixSet: nab.map.zeroWidthTag.properName  +
+               nab.map.zeroWidthTag.placeName   +
+               nab.map.zeroWidthTag.deityName   +
+               nab.map.zeroWidthTag.isImmutable +
+               '\n\r.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\'',
     postfixSet:'\n\r.,—–‒/#!¡$%^&*;:=-_`~@+?¿(){}<>[]+"“”«»‘’‛‹›…\''
   },
 
@@ -1656,18 +1677,8 @@ const nwt={
   //
   ////////////////////////////////////////////////////////////
   isDeity:function(name){
-    return nwt.map.deities[name];
+    return !nwt.map.deities[name] === undefined ;
   },
-  //////////////////////////////////////////////
-  // 
-  // isPersonName: returns true if name is in the
-  //           list of people's names
-  //
-  //////////////////////////////////////////////
-  //isPersonName:function(name){
-  //  const personObject = nwt.map.people[name.toLowerCase()];
-  //  return !!(personObject ? personObject.n : 0);
-  //},
   /////////////////////////////////////////
   //
   // splitToMetaWords
@@ -1683,10 +1694,16 @@ const nwt={
     for(let word of words){
       const mw = {}; // meta-word object
       mw.original       = word;
+      
+      // Prophylactically insure that these properties 
+      // are present and are initially false:
+      mw.isImmutable = mw.isProperName = mw.isPlaceName = mw.isDeityName = false;
+      
       /////////////////////////////////////////////////////////////////////////////
       //
       // 1. Segregate prefixed and/or postfixed "punctuation" from the word itself:
-      //    NOTA BENE: mw.prefixed *MAY* contain immutableName tags
+      //
+      //    NOTA BENE: mw.prefixed now *MAY* contain nab.map.zeroWidthTags
       //
       /////////////////////////////////////////////////////////////////////////////
       [ mw.prefixed, mw.word, mw.postfixed ] = nwt.segregatePunctuation(mw.original);
@@ -1699,51 +1716,63 @@ const nwt={
       if(firstLetter && firstLetter < nab.vowelA){
         mw.flic = firstLetter===firstLetter.toUpperCase();
       }else{
-        // NOTA BENE: This needs testing:
-        //mw.flic = (mw.prefixed.match( new RegExp( nab.map.zeroWidthTag.immutableName+'|'+nab.map.zeroWidthTag.immutablePlace+'|'+nab.map.zeroWidthTag.immutableDeity)));
+        // Get here when firstLetter is in the Trager orthography set:
         mw.flic = false;
       }
       /////////////////////////////////////////////////
       //
-      // 2. See if there are any "immutable" name tags:
+      // 2. See if there are any zeroWidthTags:
       //
       /////////////////////////////////////////////////
-      mw.isImmutableName = false;
-      if(mw.prefixed.match( nab.map.zeroWidthTag.immutableName )){
+      
+      //
+      // 2.1. IS IMMUTABLE TAG:
+      //
+      mw.isImmutable = false;
+      if(mw.prefixed.match( nab.map.zeroWidthTag.isImmutable )){
         // Set the state flag for the immutable name:
-        mw.isImmutableName = true;
-        // 2021.11.20.ET NOTA BENE: "isPerson" may not be a person
-        // but rather still is a proper name of something:
-        mw.isPerson        = true;
-        // ... but strip the immutableName marker from (1) the original
+        mw.isImmutable = true;
+        // Strip the isImmutable tag from both (1) the original
         // and also from (2) mw.prefixed because in some contexts 
-        // (such as some terminal environments)
-        // the ZWS show as regular width spaces, so:
-        const immutableNameTagRegex = new RegExp( nab.map.zeroWidthTag.immutableName, 'g' );
-        mw.original = mw.original.replace( immutableNameTagRegex , '' );
-        mw.prefixed = mw.prefixed.replace( immutableNameTagRegex , '' );
-      }else if(mw.prefixed.match( nab.map.zeroWidthTag.immutablePlaceName )){
-        mw.isImmutableName = true;
-        mw.isPlace         = true;
-        const immutablePlaceNameTagRegex = new RegExp( nab.map.zeroWidthTag.immutablePlaceName, 'g' );
-        mw.original = mw.original.replace( immutablePlaceNameTagRegex , '' );
-        mw.prefixed = mw.prefixed.replace( immutablePlaceNameTagRegex , '' );
-      }else if(mw.prefixed.match( nab.map.zeroWidthTag.immutableDeityName )){
-        mw.isImmutableName = true;
-        mw.isDeity         = true;
-        const immutableDeityNameTagRegex = new RegExp( nab.map.zeroWidthTag.immutableDeityName, 'g' );
-        mw.original = mw.original.replace( immutableDeityNameTagRegex , '' );
-        mw.prefixed = mw.prefixed.replace( immutableDeityNameTagRegex , '' );
+        // (such as some terminal environments) these "zero width"
+        // symbols actually do show up as a space character, which
+        // is highly confusing:
+        const isImmutableTagRegex = new RegExp( nab.map.zeroWidthTag.isImmutable, 'g' );
+        mw.original = mw.original.replace( isImmutableTagRegex , '' );
+        mw.prefixed = mw.prefixed.replace( isImmutableTagRegex , '' );
+      }
+      //
+      // 2.2. PROPER NAME TAG, PLACE NAME TAG, DEITY NAME TAG:
+      //      => When present, we expect only one of these:
+      //
+      if(mw.prefixed.match( nab.map.zeroWidthTag.properName )){
+        mw.isProperName = true;
+        // Strip out tags:
+        const properNameTagRegex = new RegExp( nab.map.zeroWidthTag.properName, 'g' );
+        mw.original = mw.original.replace( properNameTagRegex , '' );
+        mw.prefixed = mw.prefixed.replace( properNameTagRegex , '' );
+      }else if(mw.prefixed.match( nab.map.zeroWidthTag.placeName )){
+        mw.isPlaceName = true;
+        // Strip out tags:
+        const placeNameTagRegex = new RegExp( nab.map.zeroWidthTag.placeName, 'g' );
+        mw.original = mw.original.replace( placeNameTagRegex , '' );
+        mw.prefixed = mw.prefixed.replace( placeNameTagRegex , '' );
+      }else if(mw.prefixed.match( nab.map.zeroWidthTag.deityName )){
+        mw.isDeityName = true;
+        const deityNameTagRegex = new RegExp( nab.map.zeroWidthTag.deityName, 'g' );
+        mw.original = mw.original.replace( deityNameTagRegex , '' );
+        mw.prefixed = mw.prefixed.replace( deityNameTagRegex , '' );
       }else{
+        //
         // When names are not explicitly marked with tags, then
         // it is more difficult to know if something is really a proper 
         // name or not ... we try anyway:
         
-        // isPlace is heuristic:
-        mw.isPlace        = nwt.hasLocativeSuffix( mw.atomic );
-        mw.isDeity        = nwt.isDeity( mw.atomic );
+        // This is based on crude heuristics:
+        mw.isPlaceName = nwt.hasLocativeSuffix( mw.atomic );
+        mw.isDeityName = nwt.isDeity( mw.atomic );
         // Now using the much more comprehensive names.js module:
-        mw.isPerson       = nms.isName( mw.word );
+        mw.isProperName = nms.isName( mw.word );
       }
       metaWords.push( mw );
     }
