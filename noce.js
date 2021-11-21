@@ -295,6 +295,10 @@ function convertNahuatl(inString){
     //
     if(metaWord.isImmutableName){
       // DEBUG: console.log(`IMMUTABLE: |${metaWord.word}|`);
+      
+      // Because names are tagged as "immutable",
+      // for the Latin-based orthographies
+      // we let them "pass through" unchanged:
       hmod += metaWord.word;
       sep  += metaWord.word;
       ack  += metaWord.word;
@@ -309,17 +313,21 @@ function convertNahuatl(inString){
       //
       if( metaWord.isDeity ){
         // a diety:
+        //console.log(`DEITY: ${metaWord.word}`);
         tmod += nab.prefixDeity + ttmod;
       }else if( metaWord.isPlace ){
         // a place name:
+        //console.log(`PLACE: ${metaWord.word}`);
         tmod += nab.prefixPlace + ttmod;
       }else if( metaWord.isPerson ){
         // Actually this could be any proper noun that is not a diety or place name:
+        //console.log(`PROPER NOUN: ${metaWord.word}`);
         tmod += nab.prefixName + ttmod;
       }else{
         // We know it is a name, but not sure
         // what kind of name: It is best to prefix
         // it with the generic name prefix:
+        //console.log(`NOT SURE WHAT KIND OF NAME: ${metaWord.word}`);
         tmod += nab.prefixName + ttmod;
       }
       
@@ -362,7 +370,7 @@ function convertNahuatl(inString){
       }else{
         // Checkbox *NOT* checked, so don't convert. But for Trager, if
         // it does not register as a diety or name or place, then *DO* convert:
-        if( metaWord.isDiety || metaWord.isPerson || metaWord.isPlace ){
+        if( metaWord.isDeity || metaWord.isPerson || metaWord.isPlace ){
           tmod += metaWord.original;
         }else{
           tmod += ttmod;
@@ -405,7 +413,7 @@ function convertNahuatl(inString){
     atom += ' ';
     allo += ' ';
   }
-
+  // END OF for metaWord of metaWords LOOP
 
   // Show the results:
   //ta_hasler.value = hmod;
