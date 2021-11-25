@@ -62,6 +62,23 @@ function convertNahuatl(inString){
   if(!inString){
     return;
   }
+  //
+  // 2021.11.25.ET ADDENDUM: the splitToMetaWords() function
+  // relies on the presence of spaces between words. If the
+  // inString is just a list of words from a file and only has 
+  // carriage returns at the end of each line and no spaces, e.g.
+  // if inString looks like this:
+  // "tsitsimitl\nyejyektsij\npilsiuatsijtsi\nmichih\nnoçivatzih"
+  // ... then the splitToMetaWords function is not going to parse
+  // correctly. If we make '\n' act like just another "white
+  // space" character, then we lose the formatting of simple word
+  // lists like this. A reasonable solution —which we implement 
+  // here— is to convert all '\n' to ' \n' —that is, we just add
+  // a space before each new line. So now all the words in the word
+  // list have a space after them, and the '\n' gets treated as 
+  // a "prefixed" punctuation and the list formatting is then
+  // preserved:
+  inString = inString.replace(/\n/g,' \n');
   
   // CREATE RESULT SET CONTAINERS:
   let hmod=''; // Hasler Modern
