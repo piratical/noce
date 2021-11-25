@@ -1316,26 +1316,26 @@ const nwt={
     // Conversion in this direction will be
     // much harder to get right:
     // 1. TZIH => TZIN : conetzin, etc.
-    atomic = atomic.replace(/tzih?\b/,'tzin');
+    atomic = atomic.replace(/τih?$/,'τin');
     // 2. CHIH => CHIN: michin, kuatochin, etc.
     // There are only 2 words in IDIEZ Tlahtolxitlauhcayotl that
     // actually end in 'chih': lechih (prestado de español 'leche', milk) and 'Pechih'
     // (tokayotl tlen Pedro). So we don't convert those two words:
-    if(!atomic.match(/[lp]eςih\b/)){
-      atomic = atomic.replace(/ςih\b/,'ςin');
+    if(!atomic.match(/[lp]eςih$/)){
+      atomic = atomic.replace(/ςih$/,'ςin');
     }
     // 3. LIH => LIN: totolin, etc.
     // There are only 2 words in IDIEZ TXC that end in 'kikilih'
     // which we avoid converting:
-    if(!atomic.match(/kikilih\b/)){
-      atomic = atomic.replace(/lih\b/,'lin');
+    if(!atomic.match(/kikilih$/)){
+      atomic = atomic.replace(/lih$/,'lin');
     }
     // 4. TIH => TIN: inihwantin, inmowantin, tohwantin
     // Since plural verb forms like 'titekitih' end in 'tih',
     // It is better to specify exactly the set of words we can safely 
     // convert. The following limited set may expand in the future:
-    if(atomic.match(/(inihwantih|inmowantih|tohwantih)\b/)){
-      atomic = atomic.replace(/tih\b/,'tin');
+    if(atomic.match(/(inihwantih|inmowantih|tohwantih)$/)){
+      atomic = atomic.replace(/tih$/,'tin');
     }
     return atomic;
   },
@@ -1709,6 +1709,15 @@ const nwt={
       [ mw.prefixed, mw.word, mw.postfixed ] = nwt.segregatePunctuation(mw.original);
       // DEBUG:
       // console.log(`=====\npre:${mw.prefixed} * word:${mw.word} * post:${mw.postfixed}`);
+
+      //////////////////////////////////////////////////////////////
+      //
+      // CONVERT EACH WORD TO ITS INITIAL ATOMIC REPRESENTATION:
+      //
+      // NOTA BENE: At this point, any allophonic spellings are still
+      //            reflected in the atomic spelling as well.
+      //
+      //////////////////////////////////////////////////////////////
       mw.atomic         = nwt.toAtomic( mw.word.toLowerCase() );
       const firstLetter = mw.word[0];
       // flic = first letter is capital

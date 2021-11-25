@@ -114,7 +114,7 @@ function convertNahuatl(inString){
   //
   ///////////////////////////////////////////////////////////////////
   const metaWords = nwt.splitToMetaWords(inString.normalize('NFC'));
-
+  
   ////////////////////////////////////
   //
   // START ITERATING OVER METAWORDS:
