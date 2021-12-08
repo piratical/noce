@@ -115,6 +115,12 @@ function convertNahuatl(inString){
   // NOTA BENE HOW WE HAVE ADDED "ELI" AS AN ISOLATED WORD HERE:
   const l2llExcluderRegex = new RegExp( '^eli$|(' + l2llExcluder + ')$' );
   
+  // 
+  // ITA2ITTA SETUP: Geminate words like 'tlepanita' to 'tlepanitta', etc.:
+  //
+  const ita2ittaExcluder = nwt.arrayToOptionString(alo.ita2itta.exclude);
+  const ita2ittaExcluderRegex = new RegExp( '^nitah$|(' + ita2ittaExcluder + ')' );
+  
   //
   // HK2WK SETUP: Back convert preterit verb forms like 'pehki' to 'pewki'
   //
@@ -159,6 +165,20 @@ function convertNahuatl(inString){
     if(!metaWord.atomic.match(l2llExcluderRegex)){
       metaWord.atomic = nwt.atomicL2LLGeminator(metaWord.atomic);
     }
+    ////////////////////////////////////////////////////////////////////
+    //
+    // "F" TO "M" RULE: ITA => ITTA
+    // 
+    // This is the rule to re-geminate the verbs based on 'itta' (to see)
+    // So basically anytime you see 'ita' in Nahuatl, it is probably one
+    // of the verb forms, excepting a small list of excluded words
+    // that are not 'itta' verb forms, which we exclude:
+    //
+    ////////////////////////////////////////////////////////////////////
+    if(!metaWord.atomic.match(ita2ittaExcluderRegex)){
+      metaWord.atomic = nwt.atomicT2TTGeminator(metaWord.atomic);
+    }
+    
     ////////////////////////////////////////////////////////////////////
     //
     // "F" TO "M" RULE: HK(I|EH) => WK(I|EH)

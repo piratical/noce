@@ -320,7 +320,8 @@ const alo={
   // /n/ to [h]:
   n2h:{
     // These are the words that
-    // preserve terminal /n/ as [n]:
+    // preserve terminal /n/ as [n]
+    // that we are aware of:
     exclude:{
       'wan':1,
       'iwan':1,
@@ -405,6 +406,28 @@ const alo={
       'κamahmanili',
       'weweyakilwili',
       'λaκalλalili'
+    ]
+  },
+  //////////////////////////////////////////////////////
+  //
+  // Here again ita2itta is really just a gemination
+  // rule to use when converting 'F' => 'M'
+  // orthography. The words in the exclusion list
+  // are the only ones in the IDIEZ dictionary 
+  // that are spelled 'ita' in the 'M' orthography
+  // so anything else with 'ita' should be converted
+  // back to geminated 'itta':
+  //
+  //////////////////////////////////////////////////////
+  ita2itta:{
+    exclude:[
+      'gwitaρah', // <= This is how 'guitarah' is spelled in atomic (because the engine doesn't understand spanish rules)
+      'witakaς',
+      'ikxitatapal',
+      //'nitah', <= Need to treat separately: see code in noce.js
+      'palomitas',
+      'weitatah',
+      'weyitatah'
     ]
   },
   //////////////////////////////////////////////////////////////
@@ -1151,6 +1174,15 @@ const nwt={
     return atomic.replace(regex,function(match,p1){
       return p1 + 'lli';
     });
+  },
+  // 
+  // atomicT2TTGeminator: Restore gemination
+  // on words sourced from an "F" orthography:
+  // This is really restricted for use on the
+  // verb form, 'ita'=>'itta':
+  //
+  atomicT2TTGeminator:function(atomic){
+    return atomic.replace(/ita/,'itta');
   },
   //
   // atomicHK2WKLabializor: Restore the /w/
