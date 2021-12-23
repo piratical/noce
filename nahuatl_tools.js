@@ -1288,10 +1288,18 @@ const nwt={
   //
   ////////////////////////////////////////////
   atomicAllophoneKw2K:function(atomic){
+    // The only case I know of for κ -> k is in the preterit of tzacua -> tzaucqui
+    // which Andres Ehecatl Aguilar mentions on p. 28-29 of his master's thesis.
+    // Aguilar says the following consonant need only be a velar consonant, but it 
+    // is not clear to me what other velar consonants one would see after /kʷ/ 
+    // besides the common /k/. So, for now we have:
+    atomic = atomic.replace(/([aeio])κ(k)/g,(match,p1,p2)=>{
+      return `${p1}h${p2}`;
+    });
     // Theoretically a foreign consonant could very rarely occur in 
     // a compound neologism, so we include the foreign consonants.
     // Also we include a space to mark the end of a word:
-    atomic = atomic.replace(/([aeio])κ([mnptkκτλςsxhlwyñβdgfrρbv ])/g,(match,p1,p2)=>{
+    atomic = atomic.replace(/([aeio])κ([mnptκτλςsxhlwyñβdgfrρbv ])/g,(match,p1,p2)=>{
       return `${p1}k${p2}`;
     });
     // Single word at end of a string:
