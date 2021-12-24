@@ -1281,28 +1281,36 @@ const nwt={
   },
   ////////////////////////////////////////////
   //
-  // atomicAllophoneKw2K
+  // atomicAllophoneKw2KorH
   //
-  // -> Convert /kʷ/ in coda position to [k]
-  //    for "F" phonetic orthographies.
-  //
+  // -> Convert /kʷ/ in coda position to [h] 
+  //    or [k] for "F" phonetic orthographies.
+  // 
   ////////////////////////////////////////////
-  atomicAllophoneKw2K:function(atomic){
-    // The only case I know of for κ -> k is in the preterit of tzacua -> tzaucqui
-    // which Andres Ehecatl Aguilar mentions on p. 28-29 of his master's thesis.
-    // Aguilar says the following consonant need only be a velar consonant, but it 
+  atomicAllophoneKw2KorH:function(atomic){
+    //
+    // FIRST CASE: /kʷ/ -> [h] when followed by /k/
+    //
+    // The only cases I know of for κ -> h are:
+    // 1) in the preterit of tzacua, e.g., tzaucqui
+    // 2) words with root "teuc" such as toteucco 
+    // Andres Ehecatl Aguilar says in his master's thesis (around p. 28-29) 
+    // that the following consonant need only be a velar consonant, but it 
     // is not clear to me what other velar consonants one would see after /kʷ/ 
     // besides the common /k/. So, for now we have:
     atomic = atomic.replace(/([aeio])κ(k)/g,(match,p1,p2)=>{
       return `${p1}h${p2}`;
     });
+    //
+    // SECOND CASE WHERE /kʷ/ DELABIALIZES TO [k]:
+    //
     // Theoretically a foreign consonant could very rarely occur in 
     // a compound neologism, so we include the foreign consonants.
     // Also we include a space to mark the end of a word:
     atomic = atomic.replace(/([aeio])κ([mnptκτλςsxhlwyñβdgfrρbv ])/g,(match,p1,p2)=>{
       return `${p1}k${p2}`;
     });
-    // Single word at end of a string:
+    // CASE OF A WORD TERMINATING IN /kʷ/ ALSO PRESUMABLY DELABIALIZING to /k/:
     atomic = atomic.replace(/([aeio])κ$/,(match,p1)=>{
       return `${p1}k`;
     });

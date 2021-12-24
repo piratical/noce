@@ -255,7 +255,7 @@ function convertNahuatl(inString){
     //
     // /kw/ AS CODA TO [k] RULE: No exclusions that I know of:
     //
-    allophonic = nwt.atomicAllophoneKw2K(allophonic);
+    allophonic = nwt.atomicAllophoneKw2KorH(allophonic);
     
     // FINALLY WE CAN CONVERT FROM ALLOPHONIZED
     // ATOMIC TO DESTINATION "F" ORTHOGRAPHIES:
