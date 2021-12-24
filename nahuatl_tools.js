@@ -323,6 +323,7 @@ const alo={
     // preserve terminal /n/ as [n]
     // that we are aware of:
     exclude:{
+      'in':1,
       'wan':1,
       'iwan':1,
       'ken':1,
