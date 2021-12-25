@@ -1335,11 +1335,25 @@ const nwt={
   //    applying this function
   ////////////////////////////////////////////
   atomicAllophoneLL2HL:function(atomic){
-    // Theoretically a foreign consonant could very rarely occur in 
-    // a compound neologism, so we include the foreign consonants.
-    // Also we include a space to mark the end of a word:
     atomic = atomic.replace(/([i])l(l[ai])/g,(match,p1,p2)=>{
       return `${p1}h${p2}`;
+    });
+    return atomic;
+  },
+  ///////////////////////////////////////////////
+  //
+  // atomicAllophoneKCons2HCons
+  // 
+  // Convert /k/ in coda position to [h]
+  // when followed by a consonant at the beginning
+  // of the following syllable.
+  //
+  ///////////////////////////////////////////////
+  atomicAllophoneKCons2HCons:function(atomic){
+    // Seems kind of unlikely that this would happen with foreign
+    // consonants, but we have them in here for now anyway:
+    atomic = atomic.replace(/([aeio])k([mnptkκτλςsxhlwyñβdgfrρbv])([aeio])/g,(match,p1,p2,p3)=>{
+      return `${p1}h${p2}${p3}`;
     });
     return atomic;
   },
