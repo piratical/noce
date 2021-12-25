@@ -309,19 +309,26 @@ nab.map={
 
 //////////////////////////////////////
 //
-// ALLOPHONE RULES SECTION: alo
+// ALLOPHONE AND OTHER RULES 
+// AND EXCEPTIONS SECTION: alo
 //
 // NOTA BENE: BE SURE TO USE ONLY 
 // THE ATOMIC ORTHOGRAPHY FOR ALLOPHONE
-// RULES:
+// AND OTHER RULES:
 //
 //////////////////////////////////////
 const alo={
   // /n/ to [h]:
   n2h:{
-    // These are the words that
-    // preserve terminal /n/ as [n]
-    // that we are aware of:
+    // These are the words that preserve terminal /n/ as [n]
+    // of which we are aware. According Andres Ehecatl Aguilar,
+    // a lot of these are actually pronounced with the final
+    // vowel nasalized, e.g., /aʃt͡ɬen/ is realized as [aʃˈt͡ɬɛ̃].
+    // Since this is definitely *not* an aspiration like [h], it
+    // is often written in the fonetic 'F' class of orthographies
+    // using an "n" ... but perhaps not always. In anycase, in
+    // NOCE and Yoltok, we will preserve the phonemic spelling
+    // and keep the terminal 'n' on these words:
     exclude:{
       'in':1,
       'wan':1,
@@ -330,6 +337,7 @@ const alo={
       'pan':1,
       'ipan':1,
       'λen':1,
+      'axλen':1,
       'λan':1,
       'san':1,
       'xillan':1
@@ -1433,12 +1441,17 @@ const nwt={
   },
   /////////////////////////////////////////
   //
-  // markStress: Mark stress on the 
+  // markPenultimateStress: Mark stress on the 
   // penultimate syllable of a syllabified
   // atomic word string, s
   //
+  // => There are exceptions to penultimate
+  //    stress. These can be handled on a
+  //    case-by-case basis outside of this
+  //    function.
+  //
   /////////////////////////////////////////
-  markStress:function(s){
+  markPenultimateStress:function(s){
     // Work from end of string moving
     // toward the beginning:
     const marker = 'ˈ';
@@ -1486,9 +1499,11 @@ const nwt={
     // syllabify at the PHONETIC level:
     const sylab = nwt.atomicToPhoneticSyllabified(degem);
     // Add stress marker:
-    const stres = nwt.markStress(sylab);
+    const stres = nwt.markPenultimateStress(sylab);
     // Convert to IPA:
-    return nwt.atomicToIPA(stres);
+    let iph = nwt.atomicToIPA(stres);
+    iph = nwt.IPHFixStressExceptions(iph);
+    return iph;
   },
   /////////////////////////////////////////
   //
@@ -1866,6 +1881,28 @@ const nwt={
       }
     }
     return os;
+  },
+  /////////////////////////////////////////
+  //
+  // IPHFixStressExceptions
+  //
+  // Stress is usually on the penultimate
+  // syllable ... but of course there are
+  // exceptions, so we handle those here.
+  // 
+  // NB#1: The list of exception words may be
+  // incomplete. We can always add more later.
+  //
+  // NB#2: This function works on the IPH string
+  // directly.
+  //
+  // This is a bit of a crude approach, but
+  // it works ...
+  //
+  /////////////////////////////////////////
+  IPHFixStressExceptions:function(iph){
+    iph = iph.replace(/ˈaʃ·t͡ɬen/,'aʃˈt͡ɬen');
+    return iph;
   }
 };
 
