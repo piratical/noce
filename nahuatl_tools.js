@@ -1357,6 +1357,24 @@ const nwt={
     });
     return atomic;
   },
+  ///////////////////////////////////////////////
+  //
+  // atomicAllophoneHCons2KCons
+  // 
+  // This is the a partial solution for the 
+  // reverse of the above. Here, we convert
+  // a realized [h] back to a /k/ based on
+  // verb morphology patterns:
+  //
+  ///////////////////////////////////////////////
+  atomicAllophoneHCons2KCons:function(atomic){
+    // Seems kind of unlikely that this would happen with foreign
+    // consonants, but we have them in here for now anyway:
+    atomic = atomic.replace(/\b([nt]i)h([mnptkκτλςsxhlwyñβdgfrρbv])([aeio])/g,(match,p1,p2,p3)=>{
+      return `${p1}k${p2}${p3}`;
+    });
+    return atomic;
+  },
   /////////////////////////////////////////////////////
   //
   // atomicAllophoneH2W: Convert words ending in [h]

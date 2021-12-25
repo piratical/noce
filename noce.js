@@ -193,6 +193,17 @@ function convertNahuatl(inString){
     if(!metaWord.atomic.match(hk2wkExcluderRegex)){
       metaWord.atomic = nwt.atomicHK2WKLabializor(metaWord.atomic);
     }
+    /////////////////////////////////////////////////////////////////////
+    //
+    // "F" TO "M" RULE: [nt]ih(some consonant) => [nt]ik(some consonant)
+    //
+    // e.g., this converts things like "nihneki" back to "nikneki" etc.
+    //
+    // Currently I don't have any exceptions, so we just have:
+    //
+    /////////////////////////////////////////////////////////////////////
+    metaWord.atomic = nwt.atomicAllophoneHCons2KCons(metaWord.atomic);
+
     ////////////////////////////////////////////////////////////////////
     //
     // "F" TO "M" RULE: TERMINAL "H" => TERMINAL "W"
