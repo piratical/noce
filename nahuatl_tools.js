@@ -1934,6 +1934,7 @@ const nwt={
   /////////////////////////////////////////
   IPHFixStressExceptions:function(iph){
     iph = iph.replace(/ˈaʃ·t͡ɬen/,'aʃˈt͡ɬen');
+    iph = iph.replace(/ˈjon.se/,'jonˈse');
     return iph;
   }
 };
