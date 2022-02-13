@@ -94,7 +94,7 @@ function convertNahuatl(inString){
   //
   // SET UP BEFORE ITERATING OVER METAWORDS:
   //
-  ///////////////////////////////////////////
+  ////////////////////////////////////////////
   
   //
   // LL2HL SETUP: Allophone rule for words like 
@@ -309,9 +309,9 @@ function convertNahuatl(inString){
       sep  += metaWord.prefixed;
       ack  += metaWord.prefixed;
       tmod += metaWord.prefixed;
-      //ipa  += metaWord.prefixed;
-      //atom += metaWord.prefixed;
-      //allo += metaWord.prefixed;
+      atom += metaWord.prefixed;
+      ipa  += metaWord.prefixed;
+      allo += metaWord.prefixed;
     }
     
     //
@@ -417,9 +417,9 @@ function convertNahuatl(inString){
       sep  += metaWord.postfixed;
       ack  += metaWord.postfixed;
       tmod += metaWord.postfixed;
-      //ipa  += metaWord.postfixed;
-      //atom += metaWord.postfixed;
-      //allo += metaWord.postfixed;
+      atom += metaWord.postfixed;
+      ipa  += metaWord.postfixed;
+      allo += metaWord.postfixed;
     }
     
     //
@@ -436,10 +436,6 @@ function convertNahuatl(inString){
   // END OF for metaWord of metaWords LOOP
 
   // Show the results:
-  //ta_hasler.value = hmod;
-  //ta_sep.value    = sep;
-  //ta_ack.value    = ack;
-  //ta_trager.value = tmod;
   hmod = hmod.trim();
   sep  = sep.trim();
   ack  = ack.trim();
