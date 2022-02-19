@@ -6,7 +6,21 @@
 //
 // 2022.02.17.ET
 //
-const gem={ 
+const gem={
+  //
+  // This map contains a list of words or roots
+  // with geminated consonants. The map is not
+  // complete, but we try to catch at least the
+  // most common words and convert them back to
+  // geminated forms if we find the ungeminated
+  // form. For this to work everywhere, we of course 
+  // are using the internal atomic orthography:
+  //
+  // u: ungeminated form
+  // g: geminated form
+  // e: exclusion rule. Exclusions are not always
+  //    present.
+  //
   map:[
   // M:
   // M.1.1: Various forms of "quemman":
@@ -29,8 +43,13 @@ const gem={
   // K.1.2: Other forms seem too rare, so skip ...
   // KW:
   // KW.1.1: "neκκā" is not common but we can include here anyway:
-  // TZ:
   {u:'neκa' , g:'neκκa'},
+  // TZ:
+  {u:'kotoτi' , g:'kotoττi' },
+  {u:'κeτi'   , g:'κeττi'   },
+  {u:'neτo'   , g:'neττo'   },
+  {u:'wiτo'   , g:'wiττo'   },
+  {u:'temeτon', g:'temeττon'},
   // TL: Never occurs geminated
   // CH: The rule here is terminal "ch" + "y" => "chch"
   //     But I'm not sure if anybody other than IDIEZ writes
@@ -46,17 +65,25 @@ const gem={
   // W: A few, skip for now ...
   // Y: No occurrences, skip ...
   ],
+  //
+  // geminate: This function iterates
+  // over the set above to geminate any
+  // matches that it finds:
+  //
   geminate:function(s){
     gem.map.forEach(rule=>{
       const regex = new RegExp(rule.u,'g');
+      // Check for exclusions first:
       if(rule.e){
         const exclude = new RegExp(rule.e);
         if(s.match(exclude)){
           return;
         }else{
+          // Otherwise process:
           s=s.replace(regex,rule.g);
         }
       }else{
+        // Process rule where there are no exclusions:
         s=s.replace(regex,rule.g);
       }
     });

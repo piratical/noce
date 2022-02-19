@@ -20,9 +20,8 @@ const nab = NWT.nab;
 const nwt = NWT.nwt;
 const alo = NWT.alo;
 
-// Experimental:
-//const gmn = require('./geminate.js').gmn;
-import { gmn } from './geminate.js';
+// Improved re-gemination functionality:
+import { gem } from './geminate2.js';
 
 ////////////////////////////////////////////////////////////////
 //
@@ -146,12 +145,9 @@ function convertNahuatl(inString){
   for(const metaWord of metaWords){
     // CONVERT WORDS TO OUTPUT ORTHOGRAPHIES:
     
-    // EXPERIMENTAL: See if the word should have a geminated consonant:
-    // NB: This has only limited utility at the moment. Might be better
-    // to remove it altogether ... but it is harmless ...
-    //metaWord.atomic = gmn.findGeminate(metaWord.atomic);
-
-    // THE FOLLOWING APPROACH TO RE-GEMINATION MAY BE BETTER:
+    // We now use a regex-based approach to re-geminate words
+    // or roots that are not geminated but should be:
+    metaWord.atomic = gem.geminate(metaWord.atomic);
     
     ////////////////////////////////////////////////////////////////////
     //
