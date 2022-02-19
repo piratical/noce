@@ -58,12 +58,28 @@ const gem={
   //    which is an incomplete treatment, but good enough for now:
   {u:'\\beso' , g:'esso'},
   // X: There are a number here: "x" + "y"  => "xx"
-  //    ... Skipping for now
-  // L: At a minimum, we fix 'mila' and 'mili'
+  //    Skipping for now ... {u:'', g:'' , e:''}, 
+  // L1.1: At a minimum, we fix 'mila' and 'mili'
   {u:'\\bmilah?\\b' , g:'millah'},
-  {u:'\\bmili\\b'   , g:'milli'},  
-  // W: A few, skip for now ...
-  // Y: No occurrences, skip ...
+  {u:'\\bmili\\b'   , g:'milli'},
+  // L1.2: Words ending in "alli": There are at least 130 such words.
+  //  Exclude "piyali" only:
+  {u:'ali\\b', g:'alli', e:'piyali\\b'},
+  // L1.3: Words ending in "elli": Exclude words ending in "hueli"
+  //       e.g: tlenhueli, campahueli. So it turns out there are
+  //       only a very few words that end in "-elli" ...
+  {u:'eli\\b', g:'elli', e:'weli\\b'},
+  // L1.4: Words ending in "illi":
+  //       The IDIEZ dictionary lists 3 words that have ungeminated "ili":
+  //       κamahmanili, wēwēyakilwili and λaκalλālili, so we exclude those only:
+  {u:'ili\\b', g:'illi', e:'\\b(κamahmanili|wēwēyakilwili|λaκalλālili)\\b'},
+  // L1.5: Words ending in "olli":
+  //       It looks like anything ending in "oli" should really be "olli", no exclusions:
+  {u:'oli\\b', g:'olli' },
+  // W:
+  {u:'κatewi', g:'κatewwi' },
+  {u:'āλawahkaλan', g:'āλawwahkaλan' },
+  // Y: No occurrences, so we skip ...
   ],
   //
   // geminate: This function iterates
@@ -91,6 +107,6 @@ const gem={
   }
 };
 
-// ES6 export:$
+// ES6 export:
 export { gem };
 
