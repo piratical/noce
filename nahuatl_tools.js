@@ -1408,8 +1408,9 @@ const nwt={
     // N.B.: There are two verbs (-tzahtzi and -huetzi)
     // (based on IDIEZ Tlahtolxitlauhcayotl)
     // that end in 'TZI' and therefore which can end in 'TZIH' in
-    // the plural forms and we want to avoid converting these:
-    if(!atomic.match(/τahτih$|weτih$/)){
+    // the plural forms and we want to avoid converting these.
+    // In the singular forms, we also must not add a final n
+    if(!atomic.match(/τahτih?$|weτih?$/)){
       atomic = atomic.replace(/τih?$/,'τin');
     }
     // 2. CHIH => CHIN: michin, kuatochin, etc.
