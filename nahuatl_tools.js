@@ -1405,7 +1405,13 @@ const nwt={
     // Conversion in this direction will be
     // much harder to get right:
     // 1. TZIH => TZIN : conetzin, etc.
-    atomic = atomic.replace(/τih?$/,'τin');
+    // N.B.: There are two verbs (-tzahtzi and -huetzi)
+    // (based on IDIEZ Tlahtolxitlauhcayotl)
+    // that end in 'TZI' and therefore which can end in 'TZIH' in
+    // the plural forms and we want to avoid converting these:
+    if(!atomic.match(/τahτih$|weτih$/)){
+      atomic = atomic.replace(/τih?$/,'τin');
+    }
     // 2. CHIH => CHIN: michin, kuatochin, etc.
     // There are only 2 words in IDIEZ Tlahtolxitlauhcayotl that
     // actually end in 'chih': lechih (prestado de español 'leche', milk) and 'Pechih'
