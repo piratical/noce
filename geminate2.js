@@ -3,6 +3,7 @@
 //
 // => Back convert ungeminated forms to geminated forms
 // => Must be in ATOMIC orthography
+// => MUST ONLY USE ON METAWORDS
 //
 // 2022.02.17.ET
 //
@@ -24,7 +25,7 @@ const gem={
   map:[
   // M:
   // M.1.1: Various forms of "quemman":
-  {u:'\\bkema[hn]?\\b' , g:'kemman'},
+  {u:'^kema[hn]?$' , g:'kemman'},
   // M.1.2: Other words like "quemmach":
   {u:'kema' , g:'kemma'},
   // M.1.3: "cemmo":
@@ -56,26 +57,26 @@ const gem={
   //     words with "chch" geminated ...
   // S: "ezzo": Here we limit to words that begin with this
   //    which is an incomplete treatment, but good enough for now:
-  {u:'\\beso' , g:'esso'},
+  {u:'^eso' , g:'esso'},
   // X: There are a number here: "x" + "y"  => "xx"
   //    Skipping for now ... {u:'', g:'' , e:''}, 
   // L1.1: At a minimum, we fix 'mila' and 'mili'
-  {u:'\\bmilah?\\b' , g:'millah'},
-  {u:'\\bmili\\b'   , g:'milli'},
+  {u:'^milah?$' , g:'millah'},
+  {u:'^mili$'   , g:'milli'},
   // L1.2: Words ending in "alli": There are at least 130 such words.
   //  Exclude "piyali" only:
-  {u:'ali\\b', g:'alli', e:'piyali\\b'},
+  {u:'ali$', g:'alli', e:'piyali$'},
   // L1.3: Words ending in "elli": Exclude words ending in "hueli"
   //       e.g: tlenhueli, campahueli. So it turns out there are
   //       only a very few words that end in "-elli" ...
-  {u:'eli\\b', g:'elli', e:'weli\\b'},
+  {u:'eli$', g:'elli', e:'weli$'},
   // L1.4: Words ending in "illi":
   //       The IDIEZ dictionary lists 3 words that have ungeminated "ili":
   //       κamahmanili, wēwēyakilwili and λaκalλālili, so we exclude those only:
-  {u:'ili\\b', g:'illi', e:'\\b(κamahmanili|wēwēyakilwili|λaκalλālili)\\b'},
+  {u:'ili$', g:'illi', e:'^(κamahmanili|wēwēyakilwili|λaκalλālili)$'},
   // L1.5: Words ending in "olli":
   //       It looks like anything ending in "oli" should really be "olli", no exclusions:
-  {u:'oli\\b', g:'olli' },
+  {u:'oli$', g:'olli' },
   // W:
   {u:'κatewi', g:'κatewwi' },
   {u:'āλawahkaλan', g:'āλawwahkaλan' },
