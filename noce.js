@@ -56,7 +56,7 @@ import { gem } from './geminate2.js';
 //       called "IPH".
 //
 ////////////////////////////////////////////////////////////////
-function convertNahuatl(inString){
+function convertNahuatl(inString,runF2M=false){
 
   if(!inString){
     return;
@@ -145,85 +145,90 @@ function convertNahuatl(inString){
   for(const metaWord of metaWords){
     // CONVERT WORDS TO OUTPUT ORTHOGRAPHIES:
     
-    // We now use a regex-based approach to re-geminate words
-    // or roots that are not geminated but should be:
-    metaWord.atomic = gem.geminate(metaWord.atomic);
-    
-    ////////////////////////////////////////////////////////////////////
-    //
-    // "F" TO "M" RULE: [AEIO]LI => [AEIO]LLI
-    //
-    // HERE WE RECOGNIZE that in general most words that end in
-    // a vowel + li should be geminated. There is a small list
-    // of words that should *not* be geminated, and we exclude those:
-    // 
-    ////////////////////////////////////////////////////////////////////
-    if(!metaWord.atomic.match(l2llExcluderRegex)){
-      metaWord.atomic = nwt.atomicL2LLGeminator(metaWord.atomic);
+    // STT RUN "F" TO "M" RULES:
+    if(runF2M){
+      // "F" TO "M" RULE:
+      // We now use a regex-based approach to re-geminate words
+      // or roots that are not geminated but should be:
+      metaWord.atomic = gem.geminate(metaWord.atomic);
+      
+      ////////////////////////////////////////////////////////////////////
+      //
+      // "F" TO "M" RULE: [AEIO]LI => [AEIO]LLI
+      //
+      // HERE WE RECOGNIZE that in general most words that end in
+      // a vowel + li should be geminated. There is a small list
+      // of words that should *not* be geminated, and we exclude those:
+      // 
+      ////////////////////////////////////////////////////////////////////
+      if(!metaWord.atomic.match(l2llExcluderRegex)){
+        metaWord.atomic = nwt.atomicL2LLGeminator(metaWord.atomic);
+      }
+      ////////////////////////////////////////////////////////////////////
+      //
+      // "F" TO "M" RULE: ITA => ITTA
+      // 
+      // This is the rule to re-geminate the verbs based on 'itta' (to see)
+      // So basically anytime you see 'ita' in Nahuatl, it is probably one
+      // of the verb forms, excepting a small list of excluded words
+      // that are not 'itta' verb forms, which we exclude:
+      //
+      ////////////////////////////////////////////////////////////////////
+      if(!metaWord.atomic.match(ita2ittaExcluderRegex)){
+        metaWord.atomic = nwt.atomicT2TTGeminator(metaWord.atomic);
+      }
+      
+      ////////////////////////////////////////////////////////////////////
+      //
+      // "F" TO "M" RULE: HK(I|EH) => WK(I|EH)
+      //
+      // Preterit verb forms like 'pehki' and 'kohkeh' are derived from
+      // verbs whose stems end in /w/: pewa, kowa, etc. Therefore, we should
+      // safely be able to back-convert the [h] in the coda of the syllable
+      // preceding the preterit ending ki (singular) or keh (plural) to
+      // the labialized (rounded lips) /w/ phoneme:
+      //
+      ////////////////////////////////////////////////////////////////////
+      if(!metaWord.atomic.match(hk2wkExcluderRegex)){
+        metaWord.atomic = nwt.atomicHK2WKLabializor(metaWord.atomic);
+      }
+      /////////////////////////////////////////////////////////////////////
+      //
+      // "F" TO "M" RULE: [nt]ih(some consonant) => [nt]ik(some consonant)
+      //
+      // e.g., this converts things like "nihneki" back to "nikneki" etc.
+      //
+      // Currently I don't have any exceptions, so we just have:
+      //
+      /////////////////////////////////////////////////////////////////////
+      metaWord.atomic = nwt.atomicAllophoneHCons2KCons(metaWord.atomic);
+  
+      ////////////////////////////////////////////////////////////////////
+      //
+      // "F" TO "M" RULE: TERMINAL "H" => TERMINAL "W"
+      //
+      // This covers common words like 'tonatih' and '-coneh'
+      //
+      // The list of included words that will be converted is quite small
+      // and may not be comprehensive. 
+      //
+      // NOTA BENE: This MUST precede the call to nwt.atomicAllophoneH2N()
+      //
+      ////////////////////////////////////////////////////////////////////
+      metaWord.atomic = nwt.atomicAllophoneH2W(metaWord.atomic);
+      
+      ////////////////////////////////////////////////////////////////////
+      //
+      // "F" TO "M" RULE: TERMINAL "H" => TERMINAL "N"
+      //
+      // NOTA BENE: This rule is hard to do comprehensively. But we
+      // can most certainly handle the easy cases like 'tzih' => 'tzin',
+      // etc.:
+      //
+      ////////////////////////////////////////////////////////////////////
+      metaWord.atomic = nwt.atomicAllophoneH2N(metaWord.atomic);
     }
-    ////////////////////////////////////////////////////////////////////
-    //
-    // "F" TO "M" RULE: ITA => ITTA
-    // 
-    // This is the rule to re-geminate the verbs based on 'itta' (to see)
-    // So basically anytime you see 'ita' in Nahuatl, it is probably one
-    // of the verb forms, excepting a small list of excluded words
-    // that are not 'itta' verb forms, which we exclude:
-    //
-    ////////////////////////////////////////////////////////////////////
-    if(!metaWord.atomic.match(ita2ittaExcluderRegex)){
-      metaWord.atomic = nwt.atomicT2TTGeminator(metaWord.atomic);
-    }
-    
-    ////////////////////////////////////////////////////////////////////
-    //
-    // "F" TO "M" RULE: HK(I|EH) => WK(I|EH)
-    //
-    // Preterit verb forms like 'pehki' and 'kohkeh' are derived from
-    // verbs whose stems end in /w/: pewa, kowa, etc. Therefore, we should
-    // safely be able to back-convert the [h] in the coda of the syllable
-    // preceding the preterit ending ki (singular) or keh (plural) to
-    // the labialized (rounded lips) /w/ phoneme:
-    //
-    ////////////////////////////////////////////////////////////////////
-    if(!metaWord.atomic.match(hk2wkExcluderRegex)){
-      metaWord.atomic = nwt.atomicHK2WKLabializor(metaWord.atomic);
-    }
-    /////////////////////////////////////////////////////////////////////
-    //
-    // "F" TO "M" RULE: [nt]ih(some consonant) => [nt]ik(some consonant)
-    //
-    // e.g., this converts things like "nihneki" back to "nikneki" etc.
-    //
-    // Currently I don't have any exceptions, so we just have:
-    //
-    /////////////////////////////////////////////////////////////////////
-    metaWord.atomic = nwt.atomicAllophoneHCons2KCons(metaWord.atomic);
-
-    ////////////////////////////////////////////////////////////////////
-    //
-    // "F" TO "M" RULE: TERMINAL "H" => TERMINAL "W"
-    //
-    // This covers common words like 'tonatih' and '-coneh'
-    //
-    // The list of included words that will be converted is quite small
-    // and may not be comprehensive. 
-    //
-    // NOTA BENE: This MUST precede the call to nwt.atomicAllophoneH2N()
-    //
-    ////////////////////////////////////////////////////////////////////
-    metaWord.atomic = nwt.atomicAllophoneH2W(metaWord.atomic);
-    
-    ////////////////////////////////////////////////////////////////////
-    //
-    // "F" TO "M" RULE: TERMINAL "H" => TERMINAL "N"
-    //
-    // NOTA BENE: This rule is hard to do comprehensively. But we
-    // can most certainly handle the easy cases like 'tzih' => 'tzin',
-    // etc.:
-    //
-    ////////////////////////////////////////////////////////////////////
-    metaWord.atomic = nwt.atomicAllophoneH2N(metaWord.atomic);
+    // END OF RUN "F" TO "M" RULES
     
     ////////////////////////////////////////////////
     //

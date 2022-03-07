@@ -27,29 +27,52 @@ function printUsage(){
   if(language.match(/^es_/)){
     // SPANISH LANGUAGE:
     console.log(`${TTYC.green}ncv ${TTYC.magenta}(c) 2021, 2022 por Edward H. Trager. Todos los derechos reservados.${TTYC.reset}`);
-    console.log(`${TTYC.green}USO: node ncv.js <orthografía> <fichero o frase>${TTYC.reset}`);
+    console.log(`${TTYC.green}USO: node ncv.js (runF2M) <orthografía> <fichero o frase>${TTYC.reset}`);
     console.log(`${TTYC.blue}       opciones de ortografía: ${optionList}${TTYC.reset}`);
   }else{
     // ENGLISH OTHERWISE:
     console.log(`${TTYC.green}ncv ${TTYC.magenta}(c) 2021, 2022 by Edward H. Trager. All Rights Reserved.${TTYC.reset}`);
-    console.log(`${TTYC.green}USAGE: node ncv.js <orthography> <file or phrase>${TTYC.reset}`);
+    console.log(`${TTYC.green}USAGE: node ncv.js (runF2M) <orthography> <file or phrase>${TTYC.reset}`);
     console.log(`${TTYC.blue}       orthography options: ${optionList}${TTYC.reset}`);
   }
 }
 
-if(process.argv.length!=4){
+if(process.argv.length<4){
   printUsage();
   process.exit(1);
 }
 
-const option = process.argv[2];
+//
+// Should we run the F=>M pipeline first?
+// CHECK IF PREOPTION WAS SPECIFIED:
+let runF2M=false;
+if(process.argv.length===5){
+  if(process.argv[2]==='runF2M'){
+    runF2M=true;
+  }else{
+    printUsage();
+    console.error('The only allowed pre-option directive is "runF2M"');
+    process.exit(1);
+  }
+}
+
+// GRAB THE ORTHOGRAPHY AND FILEORPHRASE OPTIONS:
+let option='';
+let fileOrPhrase='';
+if(process.argv.length===5){
+  option       = process.argv[3];
+  fileOrPhrase = process.argv[4];
+}else{
+  option       = process.argv[2];
+  fileOrPhrase = process.argv[3];
+}
+
 if(!optionList.includes(option)){
   console.log(`Sorry, "${option}" is not a valid option`);
   printUsage();
   process.exit(1);
 }
 
-const fileOrPhrase = process.argv[3];
 let input='';
 // See if input is a valid file name:
 // Synchronous file reading is good enough for now:
@@ -64,7 +87,7 @@ if(fs.existsSync(fileOrPhrase)){
 // As currently written, convertNahuatl always does
 // all of the conversions:
 //
-const result = NOCE.convertNahuatl(input);
+const result = NOCE.convertNahuatl(input,runF2M);
 if(option==='all'){
   console.log(result);
 }else{
