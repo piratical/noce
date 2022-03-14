@@ -38,10 +38,15 @@ import { gem } from './geminate2.js';
 //
 //    2. We don't know if the input string was provided in an
 //       "M" (morphophonemic) or "F" (phonetic) orthography, but
+//       *IF* THE "runF2M" FLAG IS TRUE, THEN 
 //       what we try to do is convert the input, to the extent
 //       possible, into an "M" morphonemic form. This entails
 //       making sure, *inter alia*, that words like 'kali' and 'kuali' are 
 //       geminated to the "M"-form 'kalli' and 'kualli', respectively.
+//       However note that this is a rule-based approach and some of the
+//       rules may be over zealous while other rules are not even implemented,
+//       so if you do run F=>M conversions, *BE SURE TO MANUALLY REVIEW
+//       AND EDIT THE RESULT*.
 //
 //    3. Once we have the ATOMIC words in "M" form (or as close to 
 //       "M" form as we can get, then we can also construct an
@@ -225,10 +230,18 @@ function convertNahuatl(inString,runF2M=false){
       // can most certainly handle the easy cases like 'tzih' => 'tzin',
       // etc.:
       //
+      // ALSO NOTE that this rule can be overly zealous and will convert
+      // verb forms ending in "ih" to "in" (which is wrong). Why does this happen? 
+      // Because currently the rule does not know which word is a noun and which
+      // is a verb. So, unfortunately, manual review of the result will be
+      // necessary.
+      //
       ////////////////////////////////////////////////////////////////////
       metaWord.atomic = nwt.atomicAllophoneH2N(metaWord.atomic);
     }
+    //
     // END OF RUN "F" TO "M" RULES
+    //
     
     ////////////////////////////////////////////////
     //
@@ -309,7 +322,8 @@ function convertNahuatl(inString,runF2M=false){
       hmod += metaWord.prefixed;
       sep  += metaWord.prefixed;
       ack  += metaWord.prefixed;
-      tmod += metaWord.prefixed;
+      // For Trager, also convert quotation marks:
+      tmod += metaWord.prefixed.replace('“','«');
       atom += metaWord.prefixed;
       ipa  += metaWord.prefixed;
       allo += metaWord.prefixed;
@@ -417,7 +431,8 @@ function convertNahuatl(inString,runF2M=false){
       hmod += metaWord.postfixed;
       sep  += metaWord.postfixed;
       ack  += metaWord.postfixed;
-      tmod += metaWord.postfixed;
+      // For trager, also convert quotation marks:
+      tmod += metaWord.postfixed.replace('”','»');
       atom += metaWord.postfixed;
       ipa  += metaWord.postfixed;
       allo += metaWord.postfixed;
