@@ -17,15 +17,10 @@
 // o posterior.
 //
 // INITIAL CREATION DATE: 2019.09.13 ET
-// LAST NOTED UPDATE: 2019.12.05.ET
-// (SOME UPDATES MAY NOT BE 'NOTED':
 // CHECK GITHUB HISTORY FOR THE AUTHORATIVE
-// CHANGE LOG).
+// CHANGE LOG.
 //
 ////////////////////////////////////////
-
-// REQUIRES:
-//const nms = require('./names.js').nms;
 
 // ES6 import syntax:
 import {nms} from './names.js';
