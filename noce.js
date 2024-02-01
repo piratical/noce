@@ -93,6 +93,7 @@ function convertNahuatl(inString,runF2M=false){
   let atom=''; // Atomic
   let allo=''; // Allophonic
   let iph =''; // IPA *PHONETIC* <= This is much better than the plain old IPA because it is based on the allophones
+  let src =''; // Like IPH phonetic, but stripped down to be used for searching across orthographies
   
   ///////////////////////////////////////////
   //
@@ -236,6 +237,9 @@ function convertNahuatl(inString,runF2M=false){
       // is a verb. So, unfortunately, manual review of the result will be
       // necessary.
       //
+      // TODO: 2024.01.31.ET Addendum: This can be greatly improved by forcing
+      // nwt.atomicAllophoneH2N to only operate on NOUNS ending in N:
+      //
       ////////////////////////////////////////////////////////////////////
       metaWord.atomic = nwt.atomicAllophoneH2N(metaWord.atomic);
     }
@@ -287,9 +291,11 @@ function convertNahuatl(inString,runF2M=false){
     allophonic = nwt.atomicAllophoneKCons2HCons(allophonic);
     
     // FINALLY WE CAN CONVERT FROM ALLOPHONIZED
-    // ATOMIC TO DESTINATION "F" ORTHOGRAPHIES:
+    // ATOMIC TO DESTINATION "F" (PHONETIC) ORTHOGRAPHIES:
     
     // FOR HASLER, DO *NOT* DEGEMINATE:
+    // (TODO: RAFAEL NAVA VITE *DOES* DEGEMINATE MOST
+    // SPELLINGS, EXCEPT FOR "ITTA" VERBS ...)
     let hhmod  = nwt.atomicToHaslerModern( allophonic );
     
     // ONLY SEP DEGEMINATES:
