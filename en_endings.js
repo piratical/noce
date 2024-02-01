@@ -332,7 +332,7 @@ const ehn={
   // matches a pattern:
   //
   ends_in_en:function(w){
-    enh.map.forEach(rule=>{
+    ehn.map.forEach(rule=>{
       const pattern = new RegExp(rule+'$');
       if(w.match(pattern)){
         return true;
@@ -344,5 +344,5 @@ const ehn={
 };
 
 // ES6 export:
-export { enh };
+export { ehn };
 
