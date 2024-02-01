@@ -24,6 +24,7 @@
 
 // ES6 import syntax:
 import {nms} from './names.js';
+import {enh} from './en_endings.js';
 
 ////////////////////////////////////////////////////////////////////
 //
@@ -1425,8 +1426,12 @@ const nwt={
     // Since plural verb forms like 'titekitih' end in 'tih',
     // It is better to specify exactly the set of words we can safely 
     // convert. The following limited set may expand in the future:
-    if(atomic.match(/(inihwantih|inmowantih|tohwantih)$/)){
-      atomic = atomic.replace(/tih$/,'tin');
+    //if(atomic.match(/(inihwantih|inmowantih|tohwantih)$/)){
+    //  atomic = atomic.replace(/tih$/,'tin');
+    //}
+    // Try using the set of words in enh from en_endings.js:
+    if(enh.ends_in_en(atomic){
+      atomic = atomic.slice(0,-1)+'n';
     }
     return atomic;
   },

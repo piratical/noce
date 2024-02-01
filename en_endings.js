@@ -326,22 +326,20 @@ const ehn={
     'sosolohτih'
   ],
   //
-  // ennify: This function iterates
-  // over the set above and changes
-  // the last letter from "h" back
-  // to "n" when the patterns match,
-  // otherwise it just returns
-  // the original word:
+  // ends_in_en: This function iterates
+  // over the set above and 
+  // returns TRUE if the supplied word
+  // matches a pattern:
   //
-  ennify:function(w){
+  ends_in_en:function(w){
     enh.map.forEach(rule=>{
       const pattern = new RegExp(rule+'$');
       if(w.match(pattern)){
-        return w.slice(0,-1)+'n'
+        return true;
       }
     });
-    // Nothing matched, so return original word:
-    return w;
+    // Nothing matched, so return false:
+    return false;
   }
 };
 
