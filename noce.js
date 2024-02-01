@@ -93,7 +93,7 @@ function convertNahuatl(inString,runF2M=false){
   let atom=''; // Atomic
   let allo=''; // Allophonic
   let iph =''; // IPA *PHONETIC* <= This is much better than the plain old IPA because it is based on the allophones
-  let src =''; // Like IPH phonetic, but stripped down to be used for searching across orthographies
+  let srch=''; // Like ALLO but degeminated
   
   ///////////////////////////////////////////
   //
@@ -298,8 +298,11 @@ function convertNahuatl(inString,runF2M=false){
     // SPELLINGS, EXCEPT FOR "ITTA" VERBS ...)
     let hhmod  = nwt.atomicToHaslerModern( allophonic );
     
-    // ONLY SEP DEGEMINATES:
-    let ssep   = nwt.atomicToSEP( nwt.atomicToDegeminate(allophonic) );
+    // SRCH IS JUST A DEGEMINATED ALLOPHONIC.
+    // THIS DEGEMINATED CAN THEN BE USED FOR SET, WHICH DEGEMINATES:
+    // SEP DEGEMINATES:
+    let ssrch  = nwt.atomicToDegeminate(allophonic);
+    let ssep   = nwt.atomicToSEP( ssrch );
     
     //////////////////////////////////////////
     //
@@ -333,6 +336,7 @@ function convertNahuatl(inString,runF2M=false){
       atom += metaWord.prefixed;
       ipa  += metaWord.prefixed;
       allo += metaWord.prefixed;
+      srch += metaWord.prefixed;
     }
     
     //
@@ -359,6 +363,8 @@ function convertNahuatl(inString,runF2M=false){
       ipa  += metaWord.word;
       atom += metaWord.word;
       allo += metaWord.word;
+      // TODO: Not sure if pre and post fixes should be preserved in srch?
+      srch += metaWord.word;
       //
       // However —as mentioned— in the case of Trager orthography, 
       // we *DO* want to convert and, since we know with certainty
@@ -385,6 +391,9 @@ function convertNahuatl(inString,runF2M=false){
       
     }else if(metaWord.flic){
       // FLIC: First letter is capitalized, so:
+      // ------------------------
+      // CAPITALIZED SECTION:
+      // ------------------------
       
       // Hasler Modern:
       hmod += nwt.capitalize(hhmod);
@@ -398,6 +407,8 @@ function convertNahuatl(inString,runF2M=false){
       atom += nwt.capitalize(aatom);
       // ALLO:
       allo += nwt.capitalize(allophonic);
+      // SRCH: ignore capitalization for search:
+      srch += ssrch;
       //
       // TRAGER ORTHOGRAPHY does not capitalize but uses symbolic prefixes
       //
@@ -418,7 +429,9 @@ function convertNahuatl(inString,runF2M=false){
         tmod += ttmod;
       }
     }else{
-      // NOT CAPITALIZED:
+      // ------------------------
+      // NOT CAPITALIZED SECTION:
+      // ------------------------
       hmod += hhmod;
       sep  += ssep ;
       ack  += aack ;
@@ -428,6 +441,8 @@ function convertNahuatl(inString,runF2M=false){
       // ATOM: also ignoring capitalization:
       atom += aatom;
       allo += allophonic;
+      // SRCH: also ignoring capitalization:
+      srch += ssrch;
     }
     
     //
@@ -442,6 +457,8 @@ function convertNahuatl(inString,runF2M=false){
       atom += metaWord.postfixed;
       ipa  += metaWord.postfixed;
       allo += metaWord.postfixed;
+      // TODO: Not sure if pre and post fixes should be preserved in srch?
+      srch += metaWord.postfixed;
     }
     
     //
@@ -454,6 +471,7 @@ function convertNahuatl(inString,runF2M=false){
     ipa  += ' ';
     atom += ' ';
     allo += ' ';
+    srch += ' ';
   }
   // END OF for metaWord of metaWords LOOP
 
@@ -465,6 +483,7 @@ function convertNahuatl(inString,runF2M=false){
   ipa  = ipa.trim();
   atom = atom.trim();
   allo = allo.trim();
+  srch = srch.trim();
   // 2021.10.12.ET Addendum: Fill in IPA Phonetic based on the allo data:
   // 2021.11.15.ET Addendum: Also iph needs to be all lower-case, just like IPA:
   iph  = nwt.atomicToIPAPhonetic(allo.toLowerCase());
@@ -477,7 +496,8 @@ function convertNahuatl(inString,runF2M=false){
     atom:atom,
     allo:allo,
     ipa:ipa,
-    iph:iph
+    iph:iph,
+    search:srch
   };
 }
 

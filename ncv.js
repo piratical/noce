@@ -18,7 +18,7 @@ import { tty_color as TTYC } from './tty_color.js';
 // Standard file system stuff, fs:
 import * as fs from 'fs';
 
-const optionList = 'all ack hasler sep trager ipa iph atom allo';
+const optionList = 'all ack hasler sep trager ipa iph atom allo search';
 
 function printUsage(){
   // Localize the usage message at least for spanish and english:
