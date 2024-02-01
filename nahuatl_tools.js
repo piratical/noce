@@ -1430,7 +1430,8 @@ const nwt={
     //  atomic = atomic.replace(/tih$/,'tin');
     //}
     // Try using the set of words in ehn from en_endings.js:
-    if(ehn.ends_in_en(atomic)){
+    if(ehn.ends_in_en(atomic)===true){
+      //DEBUG: console.log(`ehn.ends_in_en returned true for ${atomic}`);
       atomic = atomic.slice(0,-1)+'n';
     }
     return atomic;

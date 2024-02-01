@@ -332,12 +332,14 @@ const ehn={
   // matches a pattern:
   //
   ends_in_en:function(w){
-    ehn.map.forEach(rule=>{
-      const pattern = new RegExp(rule+'$');
+    for(let i=0;i<ehn.map.length;i++){
+      const pattern = new RegExp(ehn.map[i]+'$');
+      // DEBUG: console.log(`pattern is : ${pattern}`);
       if(w.match(pattern)){
+        //DEBUG: console.log(`*** ==> matches ${w}!`);
         return true;
       }
-    });
+    };
     // Nothing matched, so return false:
     return false;
   }
