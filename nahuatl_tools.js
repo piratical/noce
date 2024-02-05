@@ -1407,6 +1407,7 @@ const nwt={
     // the plural forms and we want to avoid converting these.
     // In the singular forms, we also must not add a final n
     if(!atomic.match(/τahτih?$|weτih?$/)){
+      // Note that we match both "tzi" and "tzih":
       atomic = atomic.replace(/τih?$/,'τin');
     }
     // 2. CHIH => CHIN: michin, kuatochin, etc.
@@ -1423,15 +1424,24 @@ const nwt={
       atomic = atomic.replace(/lih$/,'lin');
     }
     // 4. TIH => TIN: inihwantin, inmowantin, tohwantin
-    // Since plural verb forms like 'titekitih' end in 'tih',
-    // It is better to specify exactly the set of words we can safely 
-    // convert. The following limited set may expand in the future:
-    //if(atomic.match(/(inihwantih|inmowantih|tohwantih)$/)){
-    //  atomic = atomic.replace(/tih$/,'tin');
-    //}
-    // Try using the set of words in ehn from en_endings.js:
+    // NOTA BENE: Since plural verb forms like 'titekitih' end in 'tih',
+    // It is better to specify EXACTLY the set of words we can safely 
+    // convert. We now do this in ehn from en_endings.js,
+    // which we call here:
+    //
+    // 4.1. The following are handled explicitly because they are easy
+    //      to mispell (forgetting the "h" at the end of the second 
+    //      syllable):
+    atomic = atomic.replace(/inih?wah$/,'inihwan');
+    atomic = atomic.replace(/inih?wantih/,'inihwantih');
+    atomic = atomic.replace(/inmoh?wah$/,'inmohwan');
+    atomic = atomic.replace(/inmoh?wantih/,'inmohwantin');
+    atomic = atomic.replace(/toh?wah$/,'tohwan');
+    atomic = atomic.replace(/toh?wantih/,'tohwantih');
+    //
+    // 4.2. Remainder are checked by ehn.ends_in_en(atomic):
+    //
     if(ehn.ends_in_en(atomic)===true){
-      //DEBUG: console.log(`ehn.ends_in_en returned true for ${atomic}`);
       atomic = atomic.slice(0,-1)+'n';
     }
     return atomic;
